@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BallLine : MonoBehaviour
+public sealed class BallLine
 {
 
 }

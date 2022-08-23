@@ -4,16 +4,16 @@ using UnityEngine;
 public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : MonoBehaviour
 {
     private TObject _prefab;
-    private Transform _objParent;
+    private Transform _poolParent;
 
     public MonoPool(List<TObject> objects) : base(objects) { }
 
     public MonoPool(TObject[] objects) : base(objects) { }
 
-    public MonoPool(TObject obj, int capacity, Transform parent)
+    public MonoPool(TObject obj, int capacity, Transform poolParent)
     {
         _prefab = obj;
-        _objParent = parent;
+        _poolParent = poolParent;
 
         _objects = new List<TObject>(capacity);
 
@@ -30,12 +30,42 @@ public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : Mono
             _objects = new List<TObject>();
         }
 
-        _objects.Add(Object.Instantiate(_prefab, _objParent));
+        _objects.Add(Object.Instantiate(_prefab, _poolParent));
     }
 
-    public override void Release(TObject obj)
+    public override void ReleaseObject(TObject obj)
     {
         obj.gameObject.SetActive(false);
-        base.Release(obj);
+        base.ReleaseObject(obj);
+    }
+
+    public override void ReleaseObjects(List<TObject> objects)
+    {
+        foreach (var obj in objects)
+        {
+            obj.gameObject.SetActive(false);
+        }
+
+        base.ReleaseObjects(objects);
+    }
+
+    public override void ReleaseObjects(TObject[] objects)
+    {
+        foreach (var obj in objects)
+        {
+            obj.gameObject.SetActive(false);
+        }
+
+        base.ReleaseObjects(objects);
+    }
+
+    public override void ClearPool()
+    {
+        foreach(var obj in _objects)
+        {
+            Object.Destroy(obj.gameObject);
+        }
+
+        base.ClearPool();
     }
 }
