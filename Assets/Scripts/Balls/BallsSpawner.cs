@@ -13,6 +13,7 @@ public sealed class BallsSpawner : MonoBehaviour
     [SerializeField] private AvailableColors _availableColors;
 
     private MonoPool<Ball> _ballsPool;
+    private BallLine _ballLine;
 
     private void OnEnable()
     {
@@ -23,11 +24,23 @@ public sealed class BallsSpawner : MonoBehaviour
             _ballsPool.ClearPool();
         }
 
-        _ballsPool = new(_ballPrefab, _ballsPoolCapacity, _ballsParent);
+        _ballsPool = new MonoPool<Ball>(_ballPrefab, _ballsPoolCapacity, _ballsParent);
+        _ballLine = new BallLine();
     }
 
     private void OnDisable()
     {
         //EventBus.Unsubscribe(this);
+
+        StopAllCoroutines();
+    }
+
+    private void Spawn()
+    {
+        Ball ball = _ballsPool.PullObject();
+
+        ball.Init(_availableColors.GetRandomColor());
+
+        // TODO add to ballLine
     }
 }
