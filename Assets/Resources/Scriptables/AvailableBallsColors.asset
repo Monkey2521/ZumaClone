@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2382a94ecaf8149a3bfdd42810937d, type: 3}
   m_Name: AvailableBallsColors
   m_EditorClassIdentifier: 
-  _colors: []
+  _colors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0.016062975, a: 1}
+  - {r: 0, g: 0.017675638, b: 1, a: 1}
+  - {r: 1, g: 0.76383865, b: 0, a: 1}
