@@ -6,28 +6,19 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     [SerializeField] private bool _isDebug;
 
     [Header("Settings")]
-    [SerializeField] private Ball _ballPrefab;
-    [SerializeField, Range(1, 1000)] private int _ballsPoolCapacity;
+    [SerializeField] private BallsPool _balls;
     [SerializeField] private Transform _ballsParent;
-    
     [SerializeField] private AvailableColors _availableColors;
-
     [SerializeField] private BallPath _path;
 
-    private MonoPool<Ball> _ballsPool;
     private BallLine _ballLine;
 
     private void OnEnable()
     {
         EventBus.Subscribe(this);
 
-        if (_ballsPool != null)
-        {
-            _ballsPool.ClearPool();
-        }
-
-        _ballsPool = new MonoPool<Ball>(_ballPrefab, _ballsPoolCapacity, _ballsParent);
-        _ballLine = new BallLine(_ballsPool);
+        _balls.CreatePool();
+        _ballLine = new BallLine(_balls.Pool);
     }
 
     private void OnDisable()
@@ -49,10 +40,10 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
 
     private void Spawn()
     {
-        Ball ball = _ballsPool.PullObject();
+        Ball ball = _balls.Pool.PullObject();
 
         ball.Init(_availableColors.GetRandomColor());
 
-        // TODO add to ballLine
+        _ballLine.AddBall(ball);
     }
 }
