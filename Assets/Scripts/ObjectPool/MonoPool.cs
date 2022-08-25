@@ -30,7 +30,10 @@ public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : Mono
             _objects = new List<TObject>();
         }
 
-        _objects.Add(Object.Instantiate(_prefab, _poolParent));
+        var obj = Object.Instantiate(_prefab, _poolParent);
+        obj.gameObject.SetActive(false);
+
+        _objects.Add(obj);
     }
 
     public override TObject PullObject()
@@ -57,6 +60,12 @@ public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : Mono
     public override void ReleaseObject(TObject obj)
     {
         obj.gameObject.SetActive(false);
+
+        if (obj.transform.parent != _poolParent)
+        {
+            obj.transform.parent = _poolParent;
+        }
+
         base.ReleaseObject(obj);
     }
 
@@ -64,10 +73,8 @@ public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : Mono
     {
         foreach (var obj in objects)
         {
-            obj.gameObject.SetActive(false);
+            ReleaseObject(obj);
         }
-
-        base.ReleaseObjects(objects);
     }
 
     public override void ReleaseObjects(TObject[] objects)

@@ -18,7 +18,7 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
         EventBus.Subscribe(this);
 
         _balls.CreatePool();
-        _ballLine = new BallLine(_balls.Pool);
+        _ballLine = new BallLine(_balls.Pool, _path);
     }
 
     private void OnDisable()
@@ -42,8 +42,13 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     {
         Ball ball = _balls.Pool.PullObject();
 
-        ball.Init(_availableColors.GetRandomColor());
+        ball.Init(_availableColors.GetRandomColor(), "Untagged");
 
         _ballLine.AddBall(ball);
+    }
+
+    private void FixedUpdate()
+    {
+        _ballLine.MoveLine();
     }
 }

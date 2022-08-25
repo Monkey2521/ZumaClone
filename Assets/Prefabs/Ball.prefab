@@ -138,3 +138,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDebug: 0
   _rigidbody: {fileID: 9117103694079345975}
+  _renderer: {fileID: 9117103694079345972}

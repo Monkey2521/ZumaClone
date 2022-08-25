@@ -5,21 +5,46 @@ public sealed class BallLine
 {
     private List<Ball> _balls;
     private MonoPool<Ball> _ballsPool;
+    private BallPath _path;
 
-    public BallLine(MonoPool<Ball> pool)
+    public BallLine(MonoPool<Ball> pool, BallPath path)
     {
         _balls = new List<Ball>();
         _ballsPool = pool;
+        _path = path;
     }
 
-    public void AddBall(Ball ball) => _balls.Add(ball);
-
-    public void OnBallEnter(Ball sender, Collision2D collision)
+    public void AddBall(Ball ball)
     {
-        
-        for(int i = 0; i < collision.contactCount; i++)
-        {
-            var cont = collision.GetContact(i);
-        }
+        ball.Construct(this);
+
+        _balls.Insert(0, ball);
     }
+
+    public void OnBallEnter(Ball sender, Ball ball, EnterSide side)
+    {
+        if (!_balls.Contains(sender))
+        {
+            Debug.Log("Missing ball!");
+
+            return;
+        }
+
+        int senderIndex = _balls.IndexOf(sender);
+
+        ball.Construct(this);
+      
+        _balls.Insert(side == EnterSide.Back ? senderIndex : senderIndex + 1, ball);
+    }
+
+    public void MoveLine()
+    {
+
+    }
+}
+
+public enum EnterSide
+{
+    Back,
+    Forward
 }
