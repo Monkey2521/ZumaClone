@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerPlayer : MonoBehaviour, IScreenTapHandler
@@ -10,7 +9,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
     [Header("Settings")]
     [SerializeField] private BallsPool _balls;
     [SerializeField] private AvailableColors _availableColors;
-    [SerializeField] private List<Sound> _sounds;
+    [SerializeField] private SoundList _sounds;
 
     [Header("Throw settings")]
     [SerializeField, Range(1f, 10f)] private float _ballThrowSpeed;

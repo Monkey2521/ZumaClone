@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
@@ -8,7 +7,7 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
 
     [Header("Settings")]
     [SerializeField] private ObjectStats _stats;
-    [SerializeField] private List<Sound> _sounds;
+    [SerializeField] private SoundList _sounds;
 
     private int _hp;
     public int MaxHP => _stats.MaxHP;

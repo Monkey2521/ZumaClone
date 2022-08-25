@@ -11,14 +11,14 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     [SerializeField] private AvailableColors _availableColors;
     [SerializeField] private BallPath _path;
 
-    private BallLine _ballLine;
+    private BallChain _ballLine;
 
     private void OnEnable()
     {
         EventBus.Subscribe(this);
 
         _balls.CreatePool();
-        _ballLine = new BallLine(_balls.Pool, _path);
+        _ballLine = new BallChain(_balls.Pool, _path);
     }
 
     private void OnDisable()
@@ -49,6 +49,6 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
 
     private void FixedUpdate()
     {
-        _ballLine.MoveLine();
+        _ballLine.MoveChain();
     }
 }

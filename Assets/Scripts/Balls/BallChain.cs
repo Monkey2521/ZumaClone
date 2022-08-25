@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class BallLine
+public sealed class BallChain
 {
     private List<Ball> _balls;
     private MonoPool<Ball> _ballsPool;
     private BallPath _path;
 
-    public BallLine(MonoPool<Ball> pool, BallPath path)
+    public BallChain(MonoPool<Ball> pool, BallPath path)
     {
         _balls = new List<Ball>();
         _ballsPool = pool;
@@ -37,7 +37,7 @@ public sealed class BallLine
         _balls.Insert(side == EnterSide.Back ? senderIndex : senderIndex + 1, ball);
     }
 
-    public void MoveLine()
+    public void MoveChain()
     {
 
     }

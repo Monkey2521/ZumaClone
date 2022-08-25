@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
@@ -10,10 +9,10 @@ public class Ball : MonoBehaviour
     [Header("Settings")]
     [SerializeField] Rigidbody2D _rigidbody;
     [SerializeField] SpriteRenderer _renderer;
-    [SerializeField] private List<Sound> _sounds;
+    [SerializeField] private SoundList _sounds;
 
     protected Color _color;
-    private BallLine _line;
+    private BallChain _line;
 
     private MonoPool<Ball> _pool;
     private float _releaseDelay;
@@ -21,7 +20,7 @@ public class Ball : MonoBehaviour
     public Rigidbody2D Rigidbody => _rigidbody;
     public Vector2 MoveDirection => _rigidbody.velocity.normalized;
 
-    public void Construct(BallLine line)
+    public void Construct(BallChain line)
     {
         _line = line;
         _pool = null;
