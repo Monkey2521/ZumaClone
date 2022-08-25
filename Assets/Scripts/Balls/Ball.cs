@@ -7,9 +7,11 @@ public class Ball : MonoBehaviour
     [SerializeField] private bool _isDebug;
 
     [Header("Settings")]
-    [SerializeField] Rigidbody2D _rigidbody;
-    [SerializeField] SpriteRenderer _renderer;
+    [SerializeField] private FollowPath _followPath;
+    [SerializeField] private Rigidbody2D _rigidbody;
+    [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private SoundList _sounds;
+    [SerializeField, Range(0.5f, 10f)] private float _speed = 1f;
 
     protected Color _color;
     private BallChain _line;
@@ -17,14 +19,15 @@ public class Ball : MonoBehaviour
     private MonoPool<Ball> _pool;
     private float _releaseDelay;
 
+    public FollowPath FollowPath => _followPath;
+    public float Speed => _speed;
+    public Color Color => _color;
     public Rigidbody2D Rigidbody => _rigidbody;
-    public Vector2 MoveDirection => _rigidbody.velocity.normalized;
 
     public void Construct(BallChain line)
     {
         _line = line;
-        _pool = null;
-        _releaseDelay = 0f;
+        _rigidbody.velocity = Vector2.zero;
     }
 
     public void Construct (MonoPool<Ball> pool, float releaseDelay)
@@ -32,6 +35,7 @@ public class Ball : MonoBehaviour
         _pool = pool;
         _releaseDelay = releaseDelay;
         _line = null;
+        _rigidbody.velocity = Vector2.zero;
     }
 
     public void Init(Color color, string tag)
@@ -39,7 +43,7 @@ public class Ball : MonoBehaviour
         _color = color;
         _renderer.color = _color;
 
-        transform.tag = tag;
+        this.tag = tag;
     }
 
     public void Throw(Vector2 force)
@@ -63,9 +67,17 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.tag == "PlayerBall" && _line != null)
         {
+            if (_isDebug) Debug.Log("Collision with player ball");
+
             Ball enterBall = collision.gameObject.GetComponent<Ball>();
 
             _line.OnBallEnter(this, enterBall, GetEnterSide(enterBall.transform.position));
+        }
+        else if (collision.gameObject.tag == "Castle" && tag != "PlayerBall")
+        {
+            if (_isDebug) Debug.Log("Collision with castle");
+
+            collision.gameObject.GetComponent<Castle>().TakeDamage(1);
         }
         else return;
     }

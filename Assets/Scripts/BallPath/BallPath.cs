@@ -12,6 +12,20 @@ public sealed class BallPath : MonoBehaviour
     [SerializeField] private List<Vector3> _points = new List<Vector3>();
 
     public List<Vector3> Points => _points;
+    public Vector3 HeadPosition => _points[0];
+
+    public Vector3 GetNextPoint(Vector3 point)
+    {
+        if (!_points.Contains(point))
+        {
+            return -Vector3.one;
+        }
+
+        int index = _points.IndexOf(point);
+
+        if (index == _points.Count - 1) return -Vector3.one;
+        else return _points[index + 1];
+    }
 
     [ContextMenu("Calculate points")]
     private void CalculatePoints()

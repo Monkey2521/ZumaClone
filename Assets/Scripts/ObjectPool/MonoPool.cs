@@ -66,6 +66,8 @@ public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : Mono
             obj.transform.parent = _poolParent;
         }
 
+        obj.tag = "Untagged";
+
         base.ReleaseObject(obj);
     }
 

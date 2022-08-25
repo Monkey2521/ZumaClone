@@ -29,6 +29,8 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
     private void OnDisable()
     {
         EventBus.Unsubscribe(this);
+
+        StopAllCoroutines();
     }
 
     private void Start()
@@ -40,6 +42,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
             _currentBall.transform.parent = transform;
 
             _currentBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
+            _currentBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
         }
 
         if (_nextBall == null)
@@ -49,6 +52,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
             _nextBall.transform.parent = transform;
 
             _nextBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
+            _nextBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
         }
     }
 
@@ -67,6 +71,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
         _nextBall.transform.parent = transform;
 
         _nextBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
+        _nextBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
     }
 
     public void OnScreenTap(Vector3 point)

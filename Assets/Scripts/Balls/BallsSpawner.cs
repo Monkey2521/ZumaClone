@@ -12,6 +12,7 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     [SerializeField] private BallPath _path;
 
     private BallChain _ballLine;
+    private bool _enableSpawning;
 
     private void OnEnable()
     {
@@ -19,6 +20,10 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
 
         _balls.CreatePool();
         _ballLine = new BallChain(_balls.Pool, _path);
+
+        transform.position = _path.HeadPosition;
+
+        OnGameStart();
     }
 
     private void OnDisable()
@@ -30,19 +35,22 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
 
     public void OnGameStart()
     {
-
+        _enableSpawning = true;
+        Spawn();
     }
 
     public void OnGameOver()
     {
-
+        _enableSpawning = false;
     }
 
     private void Spawn()
     {
+        if (!_enableSpawning) return;
+
         Ball ball = _balls.Pool.PullObject();
 
-        ball.Init(_availableColors.GetRandomColor(), "Untagged");
+        ball.Init(_availableColors.GetRandomColor(), "ChainedBall");
 
         _ballLine.AddBall(ball);
     }
@@ -50,5 +58,12 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     private void FixedUpdate()
     {
         _ballLine.MoveChain();
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (_isDebug) Debug.Log(collision.name + " exit");
+
+        Spawn();
     }
 }

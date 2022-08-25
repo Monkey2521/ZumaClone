@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 5866714452742945730}
   - component: {fileID: 4405155829952600712}
   - component: {fileID: 469313168011350715}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Castle
   m_TagString: Castle
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
