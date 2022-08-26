@@ -9,34 +9,27 @@ public class Ball : MonoBehaviour, IDamageable
     [Header("Settings")]
     [SerializeField] private ObjectStats _stats;
     [SerializeField] private FollowPath _followPath;
-    [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private SoundList _sounds;
-    [SerializeField, Range(0.5f, 10f)] private float _speed = 1f;
 
     protected Color _color;
     private BallChain _line;
 
     private MonoPool<Ball> _pool;
     private float _releaseDelay;
+    private bool _isThrowed;
 
     private int _hp;
 
     public int MaxHP => _stats.MaxHP; // TODO возможность появления "тяжелых" шаров,
     public int HP => _hp; // для уничтожения которых нужно два или более попаданий (три в ряд)
     public FollowPath FollowPath => _followPath;
-    public float Speed => _speed;
     public Color Color => _color;
-    public Rigidbody2D Rigidbody => _rigidbody;
-
-    [HideInInspector] public Vector2 moveDirection;
-    [HideInInspector] public bool waitChain = true;
 
     public void Construct(BallChain line, MonoPool<Ball> pool)
     {
         _line = line;
         _pool = pool;
-        _rigidbody.velocity = Vector2.zero;
     }
 
     public void Construct (MonoPool<Ball> pool, float releaseDelay)
@@ -44,7 +37,6 @@ public class Ball : MonoBehaviour, IDamageable
         _pool = pool;
         _releaseDelay = releaseDelay;
         _line = null;
-        _rigidbody.velocity = Vector2.zero;
     }
 
     public void Init(Color color, string tag)
@@ -55,23 +47,27 @@ public class Ball : MonoBehaviour, IDamageable
         this.tag = tag;
     }
 
-    public void Throw(Vector2 force)
+    public void Throw(Vector3 direction, float speed)
     {
-        _rigidbody.AddForce(force, ForceMode2D.Impulse);
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + direction * speed, speed * Time.fixedDeltaTime);
 
-        moveDirection = force;
+        if (!_isThrowed) StartCoroutine(WaitRelease());
 
-        StartCoroutine(ReleaseDelay(_releaseDelay));
+        StartCoroutine(WaitThrow(direction, speed));
+
+        _isThrowed = true;
     }
 
-    private IEnumerator ReleaseDelay(float time)
+    private IEnumerator WaitThrow(Vector3 direction, float speed)
     {
-        yield return new WaitForSeconds(time);
+        yield return new WaitForFixedUpdate();
+        Throw(direction, speed);
+    }
 
-        if (_line == null)
-        {
-            _pool.ReleaseObject(this);
-        }
+    private IEnumerator WaitRelease()
+    {
+        yield return new WaitForSeconds(_releaseDelay);
+        _pool.ReleaseObject(this);
     }
 
     public void TakeDamage(int damage)
@@ -91,8 +87,6 @@ public class Ball : MonoBehaviour, IDamageable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        _rigidbody.velocity = Vector2.zero;
-
         if (collision.gameObject.tag == "PlayerBall" && _line != null)
         {
             if (_isDebug) Debug.Log("Collision with player ball");
@@ -109,21 +103,7 @@ public class Ball : MonoBehaviour, IDamageable
 
             _pool.ReleaseObject(this);
         }
-        else if (CompareTag(collision.gameObject.tag) && CompareTag("ChainedBall"))
-        {
-            waitChain = false;
-        } 
         else return;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        _rigidbody.velocity = Vector2.zero;
-
-        if (CompareTag(collision.gameObject.tag) && CompareTag("ChainedBall"))
-        {
-            waitChain = true;
-        }
     }
 
     private EnterSide GetEnterSide(Ball enterBall)
@@ -133,10 +113,10 @@ public class Ball : MonoBehaviour, IDamageable
         Vector2 selfPos = transform.position;
         Vector2 enterPos = enterBall.transform.position;
 
-        if ((selfPos.x < enterPos.x && selfPos.y < enterPos.y && moveDirection.y < moveDirection.x) ||  // down right ->
-            (selfPos.x > enterPos.x && selfPos.y > enterPos.y && moveDirection.y > moveDirection.x) ||  // up left    <-
-            (selfPos.x < enterPos.x && selfPos.y > enterPos.y && moveDirection.y <= moveDirection.x) || // left down   v
-            (selfPos.x > enterPos.x && selfPos.y < enterPos.y && moveDirection.y >= moveDirection.x))   //right up     ^
+        if ((selfPos.x < enterPos.x && selfPos.y < enterPos.y) || // down right ->
+            (selfPos.x > enterPos.x && selfPos.y > enterPos.y) || // up left    <-
+            (selfPos.x < enterPos.x && selfPos.y > enterPos.y) || // left down   v
+            (selfPos.x > enterPos.x && selfPos.y < enterPos.y))   //right up     ^
         {
             side = EnterSide.Forward;
 

@@ -153,11 +153,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b3f62bc3072634393c4c49b1b0f8a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDebug: 0
+  _isDebug: 1
   _balls: {fileID: 11400000, guid: 9d6642ca8445f2e4b8a6cf38cd56b844, type: 2}
   _ballsParent: {fileID: 11119851}
   _availableColors: {fileID: 11400000, guid: 311d41e88d3f28645b280ab08b96b1e2, type: 2}
   _path: {fileID: 1009516828}
+  enableSpawning: 0
 --- !u!4 &11119851
 Transform:
   m_ObjectHideFlags: 0
@@ -197,7 +198,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.01, y: 1.01}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &37303200
 GameObject:
@@ -1461,7 +1462,7 @@ Transform:
   - {fileID: 1991906516}
   - {fileID: 1656374392}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1027411679
 GameObject:
@@ -1968,9 +1969,9 @@ MonoBehaviour:
     - _name: Reload
       _soundType: 2
       _clip: {fileID: 0}
-  _ballThrowSpeedMultiplier: 10
+  _ballThrowSpeed: 4.11
   _reloadTime: 0.4
-  _releaseDelay: 3.6
+  _ballReleaseDelay: 3.8
 --- !u!4 &1578090396
 Transform:
   m_ObjectHideFlags: 0
@@ -1984,7 +1985,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1580057739
 GameObject:
@@ -2615,7 +2616,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 469313168011350692, guid: 31e53b5295933864cb89dd93809d4f75, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 469313168011350692, guid: 31e53b5295933864cb89dd93809d4f75, type: 3}
       propertyPath: m_LocalPosition.x

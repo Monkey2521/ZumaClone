@@ -14,14 +14,12 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     private BallChain _ballLine;
     public bool enableSpawning;
 
-    private int _onCollision;
-
     private void OnEnable()
     {
         EventBus.Subscribe(this);
 
         _balls.CreatePool();
-        _ballLine = new BallChain(_balls.Pool, _path, this);
+        _ballLine = new BallChain(_balls.Pool, _path);
 
         transform.position = _path.HeadPosition;
 
@@ -66,14 +64,6 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     {
         if (_isDebug) Debug.Log(collision.name + " exit");
 
-        _onCollision--;
-
-        if (_onCollision == 0)
-            Spawn();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        _onCollision++;
+        Spawn();
     }
 }

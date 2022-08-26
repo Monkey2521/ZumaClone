@@ -59,6 +59,7 @@ public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : Mono
 
     public override void ReleaseObject(TObject obj)
     {
+        obj.StopAllCoroutines();
         obj.gameObject.SetActive(false);
 
         if (obj.transform.parent != _poolParent)
@@ -83,10 +84,8 @@ public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : Mono
     {
         foreach (var obj in objects)
         {
-            obj.gameObject.SetActive(false);
+            ReleaseObject(obj);
         }
-
-        base.ReleaseObjects(objects);
     }
 
     public override void ClearPool()

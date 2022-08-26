@@ -27,17 +27,21 @@ public sealed class BallPath : MonoBehaviour
         else return _points[index + 1];
     }
 
-    public Vector3 GetPrevPoint(Vector3 point)
+    public Vector3 GetNearestPoint(Vector3 position)
     {
-        if (!_points.Contains(point))
+        int index = 0;
+        float minMagnitude = (position - _points[0]).magnitude;
+
+        for(int i = 1; i < _points.Count; i++)
         {
-            return -Vector3.one;
+            if ((position - _points[i]).magnitude < minMagnitude)
+            {
+                minMagnitude = (position - _points[0]).magnitude;
+                index = i;
+            }
         }
 
-        int index = _points.IndexOf(point);
-
-        if (index == 0) return -Vector3.one;
-        else return _points[index - 1];
+        return _points[index];
     }
 
     [ContextMenu("Calculate points")]

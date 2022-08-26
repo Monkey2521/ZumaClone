@@ -6,7 +6,6 @@ public sealed class BallChain
     private List<Ball> _balls;
     private MonoPool<Ball> _ballsPool;
     private BallPath _path;
-    private BallsSpawner _spawner;
 
     private Ball _head;
 
@@ -19,12 +18,11 @@ public sealed class BallChain
     private readonly float _deltaPosForEntering = 0.15f;
     private readonly float _maxDeltaBtwBalls = 1.01f;
 
-    public BallChain(MonoPool<Ball> pool, BallPath path, BallsSpawner spawner)
+    public BallChain(MonoPool<Ball> pool, BallPath path)
     {
         _balls = new List<Ball>();
         _ballsPool = pool;
         _path = path;
-        _spawner = spawner;
     }
 
     public void AddBall(Ball ball)
@@ -32,7 +30,7 @@ public sealed class BallChain
         ball.Construct(this, _ballsPool);
 
         ball.transform.position = _path.HeadPosition;
-        ball.FollowPath.Init(_path, ball.Speed);
+        ball.FollowPath.Init(_path);
         ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 
         _balls.Insert(0, ball);
@@ -54,14 +52,11 @@ public sealed class BallChain
 
         _isEntering = true;
 
-        sender.Rigidbody.velocity = Vector2.zero;
-
         int senderIndex = _balls.IndexOf(sender);
 
         ball.StopAllCoroutines();
         ball.Construct(this, _ballsPool);
-        ball.FollowPath.Init(_path, ball.Speed);
-        ball.FollowPath.InitTarget(sender.FollowPath.TargetPoint);
+        ball.FollowPath.Init(_path);
         ball.tag = "ChainedBall";
         ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 
@@ -159,17 +154,12 @@ public sealed class BallChain
         if (_isEntering)
         {
             if (!_isDestoyed)
-            {
-                for (int i = 0; i < _enterIndex; i++)
-                {
-                    _balls[i].FollowPath.MoveBack();
-                }
-
+            { 
                 _balls[_enterIndex].transform.position = Vector3.MoveTowards
                     (
                         _balls[_enterIndex].transform.position, 
                         _enterPos,
-                        Time.fixedDeltaTime * _balls[_enterIndex].Speed
+                        Time.fixedDeltaTime * _balls[_enterIndex].FollowPath.speed
                     );
 
                 for(int i = _enterIndex + 1; i < _balls.Count; i++)
@@ -180,7 +170,6 @@ public sealed class BallChain
                 if ((_balls[_enterIndex].transform.position - _enterPos).magnitude < _deltaPosForEntering)
                 {
                     _isEntering = false;
-                    _spawner.enableSpawning = true;
                 }
             }
             else
@@ -189,15 +178,9 @@ public sealed class BallChain
                 {
                     _balls[i].FollowPath.Move();
                 }
-
-                for (int i = _enterIndex; i < _balls.Count; i++)
-                {
-                    _balls[i].FollowPath.MoveBack();
-                }
                 if ((_balls[_enterIndex].transform.position - _balls[_enterIndex - 1].transform.position).magnitude <= _maxDeltaBtwBalls)
                 {
                     _isEntering = false;
-                    _spawner.enableSpawning = true;
                 }
             }
         }

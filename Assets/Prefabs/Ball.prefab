@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9117103694079345973}
   - component: {fileID: 9117103694079345972}
-  - component: {fileID: 9117103694079345975}
   - component: {fileID: 60105822031055872}
   - component: {fileID: 6743496991414317805}
   - component: {fileID: 6547428199766355847}
@@ -29,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9117103694079345974}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.32, y: 0.68, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -88,27 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &9117103694079345975
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117103694079345974}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!58 &60105822031055872
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -140,16 +118,12 @@ MonoBehaviour:
   _isDebug: 1
   _stats: {fileID: 11400000, guid: 91becc9920e3695489cbcb2b68f3b071, type: 2}
   _followPath: {fileID: 6547428199766355847}
-  _rigidbody: {fileID: 9117103694079345975}
   _renderer: {fileID: 9117103694079345972}
   _sounds:
     _sounds:
     - _name: OnDestroy
       _soundType: 2
       _clip: {fileID: 0}
-  _speed: 0.9
-  moveDirection: {x: 0, y: 0}
-  waitChain: 0
 --- !u!114 &6547428199766355847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,4 +137,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deltaPosForNextPoint: 0.1
-  _ball: {fileID: 6743496991414317805}
+  speed: 1.72
