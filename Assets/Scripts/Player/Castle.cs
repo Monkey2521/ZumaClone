@@ -43,5 +43,7 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
     public void Die()
     {
         EventBus.Publish<IGameOverHandler>(handler => handler.OnGameOver());
+
+        if (_isDebug) Debug.Log("Game over");
     }
 }

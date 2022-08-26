@@ -12,7 +12,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
     [SerializeField] private SoundList _sounds;
 
     [Header("Throw settings")]
-    [SerializeField, Range(1f, 10f)] private float _ballThrowSpeed;
+    [SerializeField, Range(1f, 10f)] private float _ballThrowSpeedMultiplier;
     [SerializeField, Range(0f, 1.5f)] private float _reloadTime;
     [SerializeField, Range(0f, 10f)] private float _releaseDelay;
 
@@ -81,7 +81,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
             _currentBall.transform.parent = null;
 
             _currentBall.Construct(_balls.Pool, _releaseDelay);
-            _currentBall.Throw(point.normalized * _ballThrowSpeed);
+            _currentBall.Throw(point.normalized * _ballThrowSpeedMultiplier);
 
             StartCoroutine(GetNextBall());
         }

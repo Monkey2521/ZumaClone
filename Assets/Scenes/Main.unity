@@ -197,7 +197,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1, y: 1.1}
+  m_Size: {x: 1.01, y: 1.01}
   m_EdgeRadius: 0
 --- !u!1 &37303200
 GameObject:
@@ -1968,7 +1968,7 @@ MonoBehaviour:
     - _name: Reload
       _soundType: 2
       _clip: {fileID: 0}
-  _ballThrowSpeed: 5
+  _ballThrowSpeedMultiplier: 10
   _reloadTime: 0.4
   _releaseDelay: 3.6
 --- !u!4 &1578090396

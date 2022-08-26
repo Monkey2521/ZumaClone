@@ -6,19 +6,30 @@ public sealed class BallChain
     private List<Ball> _balls;
     private MonoPool<Ball> _ballsPool;
     private BallPath _path;
+    private BallsSpawner _spawner;
 
     private Ball _head;
 
-    public BallChain(MonoPool<Ball> pool, BallPath path)
+    private int _minDestroyIndex, _maxDestroyIndex;
+    
+    private bool _isEntering;
+    private bool _isDestoyed;
+    private int _enterIndex;
+    private Vector3 _enterPos;
+    private readonly float _deltaPosForEntering = 0.15f;
+    private readonly float _maxDeltaBtwBalls = 1.01f;
+
+    public BallChain(MonoPool<Ball> pool, BallPath path, BallsSpawner spawner)
     {
         _balls = new List<Ball>();
         _ballsPool = pool;
         _path = path;
+        _spawner = spawner;
     }
 
     public void AddBall(Ball ball)
     {
-        ball.Construct(this);
+        ball.Construct(this, _ballsPool);
 
         ball.transform.position = _path.HeadPosition;
         ball.FollowPath.Init(_path, ball.Speed);
@@ -41,12 +52,14 @@ public sealed class BallChain
             return;
         }
 
+        _isEntering = true;
+
         sender.Rigidbody.velocity = Vector2.zero;
 
         int senderIndex = _balls.IndexOf(sender);
 
         ball.StopAllCoroutines();
-        ball.Construct(this);
+        ball.Construct(this, _ballsPool);
         ball.FollowPath.Init(_path, ball.Speed);
         ball.FollowPath.InitTarget(sender.FollowPath.TargetPoint);
         ball.tag = "ChainedBall";
@@ -54,16 +67,43 @@ public sealed class BallChain
 
         if (senderIndex == _balls.Count - 1)
         {
+            _enterIndex = _balls.Count;
             _balls.Add(ball);
         }
         else
         {
-            _balls.Insert(side == EnterSide.Back ? senderIndex : senderIndex + 1, ball);
+            _enterIndex = side == EnterSide.Back ? senderIndex : senderIndex + 1;
+            _balls.Insert(_enterIndex, ball);
         }
 
-        if (CheckRowScore(senderIndex) > 0)
+        _maxDestroyIndex = _minDestroyIndex = -1;
+        
+        int score = CheckRowScore(senderIndex);
+
+        if (score > 0)
         {
-            // TODO destoy balls
+            for (int i = _minDestroyIndex; i <= _maxDestroyIndex; i++)
+            {
+                _balls[i].TakeDamage(GameRules.BALL_DAMAGE);
+                if (_balls[i].HP <= 0)
+                {
+                    _balls[i] = null;
+                }
+            }
+
+            _balls.RemoveAll(item => item == null);
+
+            _enterIndex = _minDestroyIndex;
+            _isDestoyed = true;
+
+            if (_enterIndex == _balls.Count - 1) _isEntering = false;
+
+            EventBus.Publish<IScoreUpdateHandler>(handler => handler.OnScoreUpdate(score));
+        }
+        else
+        {
+            _isDestoyed = false;
+            _enterPos = sender.transform.position;
         }
     }
 
@@ -103,6 +143,9 @@ public sealed class BallChain
             score += ballsRowLength * GameRules.SCORE_PER_BALL;
             score += (ballsRowLength - GameRules.MIN_ROW_TO_DESTROY) * GameRules.ADDITIONAL_SCORE_PER_BALL * ballsRowLength;
 
+            _minDestroyIndex = minIndex;
+            _maxDestroyIndex = maxIndex;
+
             return score;
         }
 
@@ -113,9 +156,57 @@ public sealed class BallChain
     {
         if (_balls == null) return;
 
-        foreach(var ball in _balls)
+        if (_isEntering)
         {
-            ball.FollowPath.Move();
+            if (!_isDestoyed)
+            {
+                for (int i = 0; i < _enterIndex; i++)
+                {
+                    _balls[i].FollowPath.MoveBack();
+                }
+
+                _balls[_enterIndex].transform.position = Vector3.MoveTowards
+                    (
+                        _balls[_enterIndex].transform.position, 
+                        _enterPos,
+                        Time.fixedDeltaTime * _balls[_enterIndex].Speed
+                    );
+
+                for(int i = _enterIndex + 1; i < _balls.Count; i++)
+                {
+                    _balls[i].FollowPath.Move();
+                }
+
+                if ((_balls[_enterIndex].transform.position - _enterPos).magnitude < _deltaPosForEntering)
+                {
+                    _isEntering = false;
+                    _spawner.enableSpawning = true;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _enterIndex; i++)
+                {
+                    _balls[i].FollowPath.Move();
+                }
+
+                for (int i = _enterIndex; i < _balls.Count; i++)
+                {
+                    _balls[i].FollowPath.MoveBack();
+                }
+                if ((_balls[_enterIndex].transform.position - _balls[_enterIndex - 1].transform.position).magnitude <= _maxDeltaBtwBalls)
+                {
+                    _isEntering = false;
+                    _spawner.enableSpawning = true;
+                }
+            }
+        }
+        else
+        {
+            foreach(var ball in _balls)
+            {
+                ball.FollowPath.Move();
+            }
         }
     }
 }

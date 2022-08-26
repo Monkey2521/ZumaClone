@@ -137,7 +137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2706f37ddd2dbb04a8429f07653e9ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDebug: 0
+  _isDebug: 1
+  _stats: {fileID: 11400000, guid: 91becc9920e3695489cbcb2b68f3b071, type: 2}
   _followPath: {fileID: 6547428199766355847}
   _rigidbody: {fileID: 9117103694079345975}
   _renderer: {fileID: 9117103694079345972}
@@ -146,7 +147,9 @@ MonoBehaviour:
     - _name: OnDestroy
       _soundType: 2
       _clip: {fileID: 0}
-  _speed: 2.06
+  _speed: 0.9
+  moveDirection: {x: 0, y: 0}
+  waitChain: 0
 --- !u!114 &6547428199766355847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,4 +162,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fe166bfb41973c4da84e8e59abd9ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _deltaPosForNextPoint: 0.05
+  _deltaPosForNextPoint: 0.1
+  _ball: {fileID: 6743496991414317805}
