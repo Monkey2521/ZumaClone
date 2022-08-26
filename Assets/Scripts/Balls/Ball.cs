@@ -13,7 +13,7 @@ public class Ball : MonoBehaviour, IDamageable
     [SerializeField] private SoundList _sounds;
 
     protected Color _color;
-    private BallChain _line;
+    private BallChain _chain;
 
     private MonoPool<Ball> _pool;
     private float _releaseDelay;
@@ -26,17 +26,18 @@ public class Ball : MonoBehaviour, IDamageable
     public FollowPath FollowPath => _followPath;
     public Color Color => _color;
 
-    public void Construct(BallChain line, MonoPool<Ball> pool)
+    public void Construct(BallChain chain, MonoPool<Ball> pool)
     {
-        _line = line;
+        _chain = chain;
         _pool = pool;
+        _hp = MaxHP;
     }
 
     public void Construct (MonoPool<Ball> pool, float releaseDelay)
     {
         _pool = pool;
         _releaseDelay = releaseDelay;
-        _line = null;
+        _chain = null;
     }
 
     public void Init(Color color, string tag)
@@ -87,13 +88,13 @@ public class Ball : MonoBehaviour, IDamageable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "PlayerBall" && _line != null)
+        if (collision.gameObject.tag == "PlayerBall" && _chain != null)
         {
             if (_isDebug) Debug.Log("Collision with player ball");
 
             Ball enterBall = collision.gameObject.GetComponent<Ball>();
 
-            _line.OnBallEnter(this, enterBall, GetEnterSide(enterBall));
+            _chain.OnBallEnter(this, enterBall, GetEnterSide(enterBall));
         }
         else if (collision.gameObject.tag == "Castle" && !CompareTag("PlayerBall"))
         {
@@ -101,7 +102,7 @@ public class Ball : MonoBehaviour, IDamageable
 
             collision.gameObject.GetComponent<Castle>().TakeDamage(GameRules.BALL_DAMAGE);
 
-            _pool.ReleaseObject(this);
+            _chain.OnCastle(this);
         }
         else return;
     }

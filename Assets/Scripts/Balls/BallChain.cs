@@ -147,6 +147,12 @@ public sealed class BallChain
         else return -1;
     }
 
+    public void OnCastle(Ball ball)
+    {
+        _ballsPool.ReleaseObject(ball);
+        _balls.Remove(ball);
+    }
+
     public void MoveChain()
     {
         if (_balls == null) return;

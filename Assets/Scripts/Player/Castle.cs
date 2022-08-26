@@ -16,6 +16,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
     private void OnEnable()
     {
         EventBus.Subscribe(this);
+
+        OnGameStart();
     }
 
     private void OnDisable()
@@ -30,6 +32,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
 
     public void TakeDamage(int damage)
     {
+        if (_isDebug) Debug.Log("Castle take damage: hp = " + _hp + ", damage = " + damage);
+
         _hp -= damage;
 
         EventBus.Publish<IPlayerHPUpdateHandler>(handler => handler.OnPlayerHPUpdate(HP, MaxHP));
