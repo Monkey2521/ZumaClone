@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Ball : MonoBehaviour, IDamageable
+public class Ball : MonoBehaviour, IDamageable, IPoolable
 {
     [Header("Debug settings")]
     [SerializeField] private bool _isDebug;
@@ -48,18 +48,30 @@ public class Ball : MonoBehaviour, IDamageable
         this.tag = tag;
     }
 
+    public void ResetObject()
+    {
+        _chain = null;
+        _pool = null;
+        _isThrowed = false;
+        _releaseDelay = 0f;
+        _hp = 0;
+        _color = Color.white;
+
+        _renderer.color = _color;
+    }
+
     /// <summary>
-    /// 
+    /// Throwing in the direction
     /// </summary>
-    /// <param name="direction"></param>
-    /// <param name="speed"></param>
+    /// <param name="direction">Normalized vector</param>
+    /// <param name="speed">Move speed</param>
     public void Throw(Vector3 direction, float speed)
     {
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + direction * speed, speed * Time.fixedDeltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + direction.normalized * speed, speed * Time.fixedDeltaTime);
 
         if (!_isThrowed) StartCoroutine(WaitRelease());
 
-        StartCoroutine(WaitThrow(direction, speed));
+        StartCoroutine(WaitThrow(direction, speed)); // Moving in FixedUpdate
 
         _isThrowed = true;
     }

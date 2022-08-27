@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 [RequireComponent(typeof(AudioSource))]
-public class AudioPlayer : MonoBehaviour
+public class AudioPlayer : MonoBehaviour, IPoolable
 {
     [Header("Debug settings")]
     [SerializeField] private bool _isDebug;
@@ -23,9 +23,21 @@ public class AudioPlayer : MonoBehaviour
         _source.outputAudioMixerGroup = mixerGroup;
     }
 
+    public void ResetObject()
+    {
+        _pool = null;
+        _source.outputAudioMixerGroup = null;
+        _source.clip = null;
+    }
+
     public void Play(AudioClip clip)
     {
-        if (clip == null) return;
+        if (clip == null) 
+        {
+            _pool.ReleaseObject(this);
+
+            return;
+        }
 
         _source.clip = clip;
 

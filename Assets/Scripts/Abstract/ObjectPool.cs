@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public abstract class ObjectPool<TObject>
+public abstract class ObjectPool<TObject> where TObject : IPoolable
 {
     protected List<TObject> _objects;
     
@@ -49,11 +49,26 @@ public abstract class ObjectPool<TObject>
         return objects;
     }
 
-    public virtual void ReleaseObject(TObject obj) => _objects.Add(obj);
+    public virtual void ReleaseObject(TObject obj)
+    {
+        obj.ResetObject();
+        _objects.Add(obj);
+    }
 
-    public virtual void ReleaseObjects(List<TObject> objects) => _objects.AddRange(objects);
-
-    public virtual void ReleaseObjects(TObject[] objects) => _objects.AddRange(objects);
+    public virtual void ReleaseObjects(List<TObject> objects)
+    {
+        foreach(TObject obj in objects)
+        {
+            ReleaseObject(obj);
+        }
+    }
+    public virtual void ReleaseObjects(TObject[] objects)
+    {
+        foreach (TObject obj in objects)
+        {
+            ReleaseObject(obj);
+        }
+    }
 
     public virtual void ClearPool()
     {

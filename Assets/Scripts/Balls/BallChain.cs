@@ -56,7 +56,7 @@ public sealed class BallChain
 
         ball.StopAllCoroutines();
         ball.Construct(this, _ballsPool);
-        ball.FollowPath.Init(_path, _path.GetNearestPoint(ball.transform.position));
+        ball.FollowPath.Init(_path, sender.FollowPath.TargetPoint);
         ball.tag = "ChainedBall";
         ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 

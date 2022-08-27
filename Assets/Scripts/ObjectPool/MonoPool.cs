@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : MonoBehaviour
+public sealed class MonoPool<TObject> : ObjectPool<TObject> where TObject : MonoBehaviour, IPoolable
 {
     private TObject _prefab;
     private Transform _poolParent;

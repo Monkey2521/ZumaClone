@@ -71,7 +71,6 @@ public class SoundPool : MonoBehaviour, ISoundPlayHandler
     {
         foreach(var soundMixer in _soundMixers)
         {
-            Debug.Log(soundType.ToString() + " in; mixers: " + soundMixer.Type.ToString());
             if (soundMixer.Type == soundType)
             {
                 return soundMixer.MixerGroup;

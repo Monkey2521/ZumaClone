@@ -27,27 +27,7 @@ public sealed class BallPath : MonoBehaviour
         else return _points[index + 1];
     }
 
-    /// <summary>
-    /// Get nearest path point from current position
-    /// </summary>
-    /// <param name="position"></param>
-    /// <returns></returns>
-    public Vector3 GetNearestPoint(Vector3 position)
-    {
-        int index = 0;
-        float minMagnitude = (position - _points[0]).magnitude;
-
-        for(int i = 1; i < _points.Count; i++)
-        {
-            if ((position - _points[i]).magnitude < minMagnitude)
-            {
-                minMagnitude = (position - _points[0]).magnitude;
-                index = i;
-            }
-        }
-
-        return _points[index];
-    }
+    
 
     [ContextMenu("Calculate points")]
     private void CalculatePoints()
