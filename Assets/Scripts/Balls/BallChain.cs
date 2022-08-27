@@ -13,7 +13,7 @@ public sealed class BallChain
     
     private bool _isEntering;
     private bool _isDestoyed;
-    private int _enterIndex;
+    private int _enterIndex = -1;
     private Vector3 _enterPos;
     private readonly float _deltaPosForEntering = 0.15f;
     private readonly float _maxDeltaBtwBalls = 1.01f;
@@ -60,14 +60,13 @@ public sealed class BallChain
         ball.tag = "ChainedBall";
         ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 
-        if (senderIndex == _balls.Count - 1)
+        _enterIndex = side == EnterSide.Back ? senderIndex : senderIndex + 1;
+        if (_enterIndex == _balls.Count)
         {
-            _enterIndex = _balls.Count;
             _balls.Add(ball);
         }
         else
         {
-            _enterIndex = side == EnterSide.Back ? senderIndex : senderIndex + 1;
             _balls.Insert(_enterIndex, ball);
         }
 
@@ -91,7 +90,14 @@ public sealed class BallChain
             _enterIndex = _minDestroyIndex;
             _isDestoyed = true;
 
-            if (_enterIndex == _balls.Count - 1) _isEntering = false;
+            if (_enterIndex >= _balls.Count - 1)
+            {
+                _isEntering = false;
+                _isDestoyed = false;
+                _enterIndex = -1;
+
+                Debug.Log("Destroy head");
+            }
 
             EventBus.Publish<IScoreUpdateHandler>(handler => handler.OnScoreUpdate(score));
         }
@@ -165,7 +171,7 @@ public sealed class BallChain
                     (
                         _balls[_enterIndex].transform.position, 
                         _enterPos,
-                        Time.fixedDeltaTime * _balls[_enterIndex].FollowPath.speed
+                        Time.fixedDeltaTime * _balls[_enterIndex].FollowPath.Speed
                     );
 
                 for(int i = _enterIndex + 1; i < _balls.Count; i++)

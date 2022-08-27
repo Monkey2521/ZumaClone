@@ -5,13 +5,16 @@ using UnityEngine;
 public class FollowPath : MonoBehaviour
 {
     [SerializeField, Range(0f, 0.1f)] private float _deltaPosForNextPoint;
-    public float speed;
+    [SerializeField, Range(0.5f, 10f)] private float _speed;
 
     private Vector3 _targetPoint;
+    private Vector3 _moveDirection;
 
     private BallPath _path;
 
     public Vector3 TargetPoint => _targetPoint;
+    public Vector3 MoveDirection => (_moveDirection - transform.position).normalized;
+    public float Speed => _speed;
 
     /// <summary>
     /// Initializing following path
@@ -22,6 +25,7 @@ public class FollowPath : MonoBehaviour
     {
         _path = path;
         _targetPoint = target;
+        GetMoveDirection();
     }
 
     public void Move()
@@ -31,11 +35,27 @@ public class FollowPath : MonoBehaviour
             _targetPoint = _path.HeadPosition;
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, _targetPoint, Time.fixedDeltaTime * speed);
+        GetMoveDirection();
+        transform.position = _moveDirection;
 
-        if ((transform.position - _targetPoint).magnitude < _deltaPosForNextPoint)
+        if (CheckNextPoint(transform.position))
         {
             _targetPoint = _path.GetNextPoint(_targetPoint);
         }
+    }
+
+    /// <summary>
+    /// Check if next path point is needed
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public bool CheckNextPoint(Vector3 position)
+    {
+        return (_targetPoint - position).magnitude < _deltaPosForNextPoint;
+    }
+
+    private void GetMoveDirection()
+    {
+        _moveDirection = Vector3.MoveTowards(transform.position, _targetPoint, Time.fixedDeltaTime * _speed);
     }
 }

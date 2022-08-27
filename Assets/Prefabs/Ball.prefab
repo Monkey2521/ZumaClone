@@ -158,5 +158,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fe166bfb41973c4da84e8e59abd9ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _deltaPosForNextPoint: 0.1
-  speed: 1.5
+  _deltaPosForNextPoint: 0.075
+  _speed: 2

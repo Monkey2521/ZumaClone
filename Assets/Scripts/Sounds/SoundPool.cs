@@ -40,11 +40,6 @@ public class SoundPool : MonoBehaviour, ISoundPlayHandler
         Transform poolParent = new GameObject("AudioPlayerPool").transform;
 
         _pool = new MonoPool<AudioPlayer>(_playerPrefab, _poolCapacity, poolParent);
-
-        foreach(var obj in _pool.Objects)
-        {
-            obj.Construct(_pool);
-        }
     }
 
     public void OnSoundPlay(Sound sound)
@@ -63,6 +58,7 @@ public class SoundPool : MonoBehaviour, ISoundPlayHandler
 
         if (_isDebug) Debug.Log(sound.Name.ToString() + " play");
 
+        player.Construct(_pool);
         player.Init(mixer);
         player.Play(sound.Clip);
     }
