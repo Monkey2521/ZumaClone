@@ -52,7 +52,6 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
     public void Die()
     {
         EventBus.Publish<IGameOverHandler>(handler => handler.OnGameOver());
-        EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Destroy]));
 
         if (_isDebug) Debug.Log("Game over");
     }
