@@ -12,7 +12,7 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
     [SerializeField] private BallPath _path;
 
     private BallChain _ballLine;
-    public bool enableSpawning;
+    [HideInInspector] public bool enableSpawning;
 
     private void OnEnable()
     {

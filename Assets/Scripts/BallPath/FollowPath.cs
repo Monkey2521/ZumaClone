@@ -13,10 +13,15 @@ public class FollowPath : MonoBehaviour
 
     public Vector3 TargetPoint => _targetPoint;
 
-    public void Init(BallPath path)
+    /// <summary>
+    /// Initializing following path
+    /// </summary>
+    /// <param name="path">Path reference</param>
+    /// <param name="target">Set -Vector3.one or path.HeadPosition, if need start from head</param>
+    public void Init(BallPath path, Vector3 target)
     {
         _path = path;
-        _targetPoint = -Vector3.one;
+        _targetPoint = target;
     }
 
     public void Move()

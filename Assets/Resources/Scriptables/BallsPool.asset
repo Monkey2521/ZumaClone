@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BallsPool
   m_EditorClassIdentifier: 
   _ballPrefab: {fileID: 6743496991414317805, guid: 93b94bfc9da47074d80fa0a44eb5f6c4, type: 3}
-  _ballsPoolCapacity: 100
+  _ballsPoolCapacity: 50

@@ -30,7 +30,7 @@ public sealed class BallChain
         ball.Construct(this, _ballsPool);
 
         ball.transform.position = _path.HeadPosition;
-        ball.FollowPath.Init(_path);
+        ball.FollowPath.Init(_path, _path.HeadPosition);
         ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 
         _balls.Insert(0, ball);
@@ -56,7 +56,7 @@ public sealed class BallChain
 
         ball.StopAllCoroutines();
         ball.Construct(this, _ballsPool);
-        ball.FollowPath.Init(_path);
+        ball.FollowPath.Init(_path, _path.GetNearestPoint(ball.transform.position));
         ball.tag = "ChainedBall";
         ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 
