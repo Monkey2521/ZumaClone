@@ -6,7 +6,7 @@ public class SoundList
 {
     [SerializeField] private List<Sound> _sounds = new List<Sound>();
 
-    public Sound this[string name]
+    public Sound this[SoundNames name]
     {
         get
         {

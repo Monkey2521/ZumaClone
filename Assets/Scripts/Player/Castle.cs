@@ -37,16 +37,22 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
         _hp -= damage;
 
         EventBus.Publish<IPlayerHPUpdateHandler>(handler => handler.OnPlayerHPUpdate(HP, MaxHP));
-
+        
         if (_hp <= 0)
         {
             Die();
+            EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Destroy]));
+        }
+        else
+        {
+            EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.TakeDamage]));
         }
     }
 
     public void Die()
     {
         EventBus.Publish<IGameOverHandler>(handler => handler.OnGameOver());
+        EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Destroy]));
 
         if (_isDebug) Debug.Log("Game over");
     }

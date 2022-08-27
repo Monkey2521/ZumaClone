@@ -297,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e2fe5fdf65083744a437cf8e1bb69cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDebug: 1
+  _isDebug: 0
   _camera: {fileID: 519420031}
 --- !u!1 &648516268
 GameObject:
@@ -343,20 +343,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a74497a4982e02f43a61f7337bfd2db6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDebug: 0
+  _isDebug: 1
   _playerPrefab: {fileID: 7782513893227588125, guid: ce2442541a39b39469916b8e5bd61810, type: 3}
   _poolCapacity: 10
   _soundMixers:
   - _soundType: 0
-    _audioMixer: {fileID: 24100000, guid: be9f5e91c324d024aa5911fc5fb46eee, type: 2}
+    _audioMixer: {fileID: 24300002, guid: be9f5e91c324d024aa5911fc5fb46eee, type: 2}
   - _soundType: 1
-    _audioMixer: {fileID: 24100000, guid: 3f4ef52316dd3f64796e1b4c84d36215, type: 2}
+    _audioMixer: {fileID: 24300002, guid: 3f4ef52316dd3f64796e1b4c84d36215, type: 2}
   - _soundType: 2
-    _audioMixer: {fileID: 24100000, guid: efb9883a501c9394fb684679faebc6d0, type: 2}
+    _audioMixer: {fileID: 24300002, guid: efb9883a501c9394fb684679faebc6d0, type: 2}
   - _soundType: 3
-    _audioMixer: {fileID: 24100000, guid: 3b2bd616ebca31d44b9563bc9da44182, type: 2}
+    _audioMixer: {fileID: 24300002, guid: 3b2bd616ebca31d44b9563bc9da44182, type: 2}
   - _soundType: 4
-    _audioMixer: {fileID: 24100000, guid: e3fc3995bcb4aef4aa0019a2c74c7a60, type: 2}
+    _audioMixer: {fileID: 24300002, guid: e3fc3995bcb4aef4aa0019a2c74c7a60, type: 2}
 --- !u!1 &1009516827
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,10 +570,10 @@ MonoBehaviour:
   _availableColors: {fileID: 11400000, guid: 311d41e88d3f28645b280ab08b96b1e2, type: 2}
   _sounds:
     _sounds:
-    - _name: Throw
+    - _name: 0
       _soundType: 2
       _clip: {fileID: 0}
-    - _name: Reload
+    - _name: 1
       _soundType: 2
       _clip: {fileID: 0}
   _ballThrowSpeed: 4.11
@@ -784,10 +784,6 @@ PrefabInstance:
     - target: {fileID: 469313168011350714, guid: 31e53b5295933864cb89dd93809d4f75, type: 3}
       propertyPath: m_Name
       value: Castle
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866714452742945730, guid: 31e53b5295933864cb89dd93809d4f75, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31e53b5295933864cb89dd93809d4f75, type: 3}

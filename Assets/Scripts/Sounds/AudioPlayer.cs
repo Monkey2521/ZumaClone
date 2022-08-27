@@ -18,13 +18,15 @@ public class AudioPlayer : MonoBehaviour
         _pool = pool;
     }
 
-    public void Init(AudioMixerGroup mixer)
+    public void Init(AudioMixerGroup mixerGroup)
     {
-        _source.outputAudioMixerGroup = mixer;
+        _source.outputAudioMixerGroup = mixerGroup;
     }
 
     public void Play(AudioClip clip)
     {
+        if (clip == null) return;
+
         _source.clip = clip;
 
         _source.Play();

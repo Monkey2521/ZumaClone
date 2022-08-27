@@ -72,6 +72,8 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
 
         _nextBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
         _nextBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
+
+        EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Reload]));
     }
 
     public void OnScreenTap(Vector3 point)
@@ -82,6 +84,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
 
             _currentBall.Construct(_balls.Pool, _ballReleaseDelay);
             _currentBall.Throw(point.normalized, _ballThrowSpeed);
+            EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Throw]));
 
             StartCoroutine(GetNextBall());
         }

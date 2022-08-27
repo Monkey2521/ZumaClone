@@ -48,6 +48,11 @@ public class Ball : MonoBehaviour, IDamageable
         this.tag = tag;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="speed"></param>
     public void Throw(Vector3 direction, float speed)
     {
         transform.position = Vector3.MoveTowards(transform.position, transform.position + direction * speed, speed * Time.fixedDeltaTime);
@@ -78,6 +83,11 @@ public class Ball : MonoBehaviour, IDamageable
         if (_hp <= 0)
         {
             Die();
+            EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Destroy]));
+        }
+        else
+        {
+            EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.TakeDamage]));
         }
     }
 

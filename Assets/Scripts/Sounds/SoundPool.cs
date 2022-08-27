@@ -61,6 +61,8 @@ public class SoundPool : MonoBehaviour, ISoundPlayHandler
         var player = _pool.PullObject();
         player.transform.parent = transform;
 
+        if (_isDebug) Debug.Log(sound.Name.ToString() + " play");
+
         player.Init(mixer);
         player.Play(sound.Clip);
     }
@@ -69,9 +71,10 @@ public class SoundPool : MonoBehaviour, ISoundPlayHandler
     {
         foreach(var soundMixer in _soundMixers)
         {
+            Debug.Log(soundType.ToString() + " in; mixers: " + soundMixer.Type.ToString());
             if (soundMixer.Type == soundType)
             {
-                return soundMixer.Mixer.outputAudioMixerGroup;
+                return soundMixer.MixerGroup;
             }
         }
         return null;
@@ -81,9 +84,9 @@ public class SoundPool : MonoBehaviour, ISoundPlayHandler
     private class SoundMixer
     {
         [SerializeField] private SoundTypes _soundType;
-        [SerializeField] private AudioMixer _audioMixer;
+        [SerializeField] private AudioMixerGroup _audioMixer;
 
         public SoundTypes Type => _soundType;
-        public AudioMixer Mixer => _audioMixer;
+        public AudioMixerGroup MixerGroup => _audioMixer;
     }
 }

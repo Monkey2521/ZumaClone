@@ -137,13 +137,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2706f37ddd2dbb04a8429f07653e9ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDebug: 1
+  _isDebug: 0
   _stats: {fileID: 11400000, guid: 91becc9920e3695489cbcb2b68f3b071, type: 2}
   _followPath: {fileID: 6547428199766355847}
   _renderer: {fileID: 9117103694079345972}
   _sounds:
     _sounds:
-    - _name: OnDestroy
+    - _name: 3
       _soundType: 2
       _clip: {fileID: 0}
 --- !u!114 &6547428199766355847
