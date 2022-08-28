@@ -27,6 +27,19 @@ public sealed class BallPath : MonoBehaviour
         else return _points[index + 1];
     }
 
+    public Vector3 GetPreviousPoint(Vector3 point)
+    {
+        if (!_points.Contains(point))
+        {
+            return -Vector3.one;
+        }
+
+        int index = _points.IndexOf(point);
+
+        if (index == 0) return -Vector3.one;
+        else return _points[index - 1];
+    }
+
     
 
     [ContextMenu("Calculate points")]

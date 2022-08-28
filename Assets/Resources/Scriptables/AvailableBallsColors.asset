@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AvailableBallsColors
   m_EditorClassIdentifier: 
   _colors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0.016062975, a: 1}
-  - {r: 0, g: 0.017675638, b: 1, a: 1}
-  - {r: 1, g: 0.76383865, b: 0, a: 1}
+  - {r: 1, g: 0.78431374, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0.78431374, b: 1, a: 1}
+  - {r: 1, g: 0.6862745, b: 0.78431374, a: 1}

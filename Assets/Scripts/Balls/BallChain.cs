@@ -15,8 +15,6 @@ public sealed class BallChain
     private bool _isDestoyed;
     private int _enterIndex = -1;
     private Vector3 _enterPos;
-    private readonly float _deltaPosForEntering = 0.15f;
-    private readonly float _maxDeltaBtwBalls = 1.01f;
 
     public BallChain(MonoPool<Ball> pool, BallPath path)
     {
@@ -56,7 +54,6 @@ public sealed class BallChain
 
         ball.StopAllCoroutines();
         ball.Construct(this, _ballsPool);
-        ball.FollowPath.Init(_path, sender.FollowPath.TargetPoint);
         ball.tag = "ChainedBall";
         ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 
@@ -72,7 +69,7 @@ public sealed class BallChain
 
         _maxDestroyIndex = _minDestroyIndex = -1;
         
-        int score = CheckRowScore(senderIndex);
+        int score = CheckRowScore(_enterIndex);
 
         if (score > 0)
         {
@@ -90,11 +87,13 @@ public sealed class BallChain
             _enterIndex = _minDestroyIndex;
             _isDestoyed = true;
 
-            if (_enterIndex >= _balls.Count - 1)
+            if (_enterIndex > _balls.Count - 1)
             {
                 _isEntering = false;
                 _isDestoyed = false;
                 _enterIndex = -1;
+
+                _head = _balls[_balls.Count - 1];
 
                 Debug.Log("Destroy head");
             }
@@ -104,9 +103,45 @@ public sealed class BallChain
         else
         {
             _isDestoyed = false;
-            _enterPos = sender.transform.position;
+
+            if (_enterIndex == _balls.Count - 1)
+            {
+                _enterPos = Vector3.MoveTowards
+                    (
+                        _balls[_enterIndex - 1].transform.position,
+                        _balls[_enterIndex - 1].transform.position + _balls[_enterIndex - 1].FollowPath.MoveDirection * GameRules.MAX_RANGE_BTW_BALLS,
+                        GameRules.MAX_RANGE_BTW_BALLS
+                    );
+            }
+            else if (_enterIndex == 0)
+            {
+                _enterPos = _balls[0].FollowPath.PreviousPoint;
+                _balls[0].FollowPath.Init(_path, _balls[1].FollowPath.PreviousPoint);
+            }
+            else
+            {
+                _enterPos = _balls[_enterIndex + 1].transform.position;
+                _balls[_enterIndex].FollowPath.Init(_path, _balls[_enterIndex + 1].FollowPath.TargetPoint);
+            }
+            
         }
     }
+
+    private Vector3 CalculateNextBallPosition(Vector3 currentPos)
+    {
+        Vector3 pos = Vector3.one;
+
+        return pos;
+    }
+
+    private Vector3 CalculateNextBallPosition(Vector3 current, Vector3 next)
+    {
+        Vector3 pos = Vector3.one;
+
+        return pos;
+    }
+
+    private bool CheckBallsRange(Vector3 first, Vector3 second) => (second - first).magnitude < GameRules.MAX_RANGE_BTW_BALLS;
 
     private int CheckRowScore(int index)
     {
@@ -179,20 +214,23 @@ public sealed class BallChain
                     _balls[i].FollowPath.Move();
                 }
 
-                if ((_balls[_enterIndex].transform.position - _enterPos).magnitude < _deltaPosForEntering)
+                if ((_balls[_enterIndex].transform.position - _enterPos).magnitude < GameRules.MAX_DELTA_POS)
                 {
                     _isEntering = false;
                 }
             }
             else
             {
-                for (int i = 0; i < _enterIndex; i++)
+                for (int i = _enterIndex; i < _balls.Count; i++)
                 {
-                    _balls[i].FollowPath.Move();
+                    _balls[i].FollowPath.MoveBack(_balls[i].FollowPath.Speed * GameRules.MOVE_BACK_ON_PATH_SPEED_MULTIPLIER);
                 }
-                if ((_balls[_enterIndex].transform.position - _balls[_enterIndex - 1].transform.position).magnitude <= _maxDeltaBtwBalls)
+                if ((_balls[_enterIndex].transform.position - _balls[_enterIndex - 1].transform.position).magnitude <= GameRules.MAX_RANGE_BTW_BALLS)
                 {
                     _isEntering = false;
+                    _isDestoyed = false;
+                    _enterIndex = -1;
+                    _enterPos = -Vector3.one;
                 }
             }
         }

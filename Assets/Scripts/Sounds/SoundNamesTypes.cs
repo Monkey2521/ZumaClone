@@ -3,7 +3,8 @@ public enum SoundNames
     Throw,
     Reload,
     TakeDamage,
-    Destroy
+    Destroy,
+    UseBooster
 }
 
 public enum SoundTypes

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9117103694079345974
+--- !u!1 &8241042547508279680
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9117103694079345973}
-  - component: {fileID: 9117103694079345972}
-  - component: {fileID: 60105822031055872}
-  - component: {fileID: -7722198793434432871}
-  - component: {fileID: 6743496991414317805}
-  - component: {fileID: 6547428199766355847}
+  - component: {fileID: 6732336793031430639}
+  - component: {fileID: 3406240082869898870}
   m_Layer: 0
-  m_Name: Ball
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9117103694079345973
+--- !u!4 &6732336793031430639
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117103694079345974}
+  m_GameObject: {fileID: 8241042547508279680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.012, y: -0.056, z: 0}
+  m_LocalScale: {x: 0.22, y: 0.22, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 9117103694079345973}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &9117103694079345972
+--- !u!212 &3406240082869898870
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117103694079345974}
+  m_GameObject: {fileID: 8241042547508279680}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -77,17 +73,53 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: be1f25b8e67cf5d478d0ae1f5a32c9fe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &9117103694079345974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9117103694079345973}
+  - component: {fileID: 60105822031055872}
+  - component: {fileID: -7722198793434432871}
+  - component: {fileID: 6743496991414317805}
+  - component: {fileID: 6547428199766355847}
+  m_Layer: 0
+  m_Name: Ball
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9117103694079345973
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9117103694079345974}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 6732336793031430639}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &60105822031055872
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -140,12 +172,12 @@ MonoBehaviour:
   _isDebug: 0
   _stats: {fileID: 11400000, guid: 91becc9920e3695489cbcb2b68f3b071, type: 2}
   _followPath: {fileID: 6547428199766355847}
-  _renderer: {fileID: 9117103694079345972}
+  _renderer: {fileID: 3406240082869898870}
   _sounds:
     _sounds:
     - _name: 3
       _soundType: 2
-      _clip: {fileID: 0}
+      _clip: {fileID: 8300000, guid: d8d04c6f80a1140db85ede568dab1f51, type: 3}
 --- !u!114 &6547428199766355847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,5 +190,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fe166bfb41973c4da84e8e59abd9ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _deltaPosForNextPoint: 0.075
   _speed: 2
