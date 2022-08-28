@@ -9,7 +9,7 @@ public sealed class BallChain
 
     private Ball _head;
 
-    private int _minDestroyIndex, _maxDestroyIndex;
+    private int _minDestroyIndex, _maxDestroyIndex, _scorePerBall;
     
     private bool _isEntering;
     private bool _isDestoyed;
@@ -78,6 +78,8 @@ public sealed class BallChain
                 _balls[i].TakeDamage(GameRules.BALL_DAMAGE);
                 if (_balls[i].HP <= 0)
                 {
+                    EventBus.Publish<IBallDestroyedHandler>(handler => handler.OnBallDestroyed(_balls[i].transform.position, _scorePerBall));
+
                     _balls[i] = null;
                 }
             }
@@ -174,15 +176,12 @@ public sealed class BallChain
 
         if (ballsRowLength >= GameRules.MIN_ROW_TO_DESTROY)
         {
-            int score = 0;
-
-            score += ballsRowLength * GameRules.SCORE_PER_BALL;
-            score += (ballsRowLength - GameRules.MIN_ROW_TO_DESTROY) * GameRules.ADDITIONAL_SCORE_PER_BALL * ballsRowLength;
+            _scorePerBall = (ballsRowLength - GameRules.MIN_ROW_TO_DESTROY) * GameRules.ADDITIONAL_SCORE_PER_BALL + GameRules.SCORE_PER_BALL;
 
             _minDestroyIndex = minIndex;
             _maxDestroyIndex = maxIndex;
 
-            return score;
+            return _scorePerBall * ballsRowLength;
         }
 
         else return -1;

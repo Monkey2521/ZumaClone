@@ -14,4 +14,6 @@ public static class GameRules
 
     public static readonly float MAX_DELTA_POS = 0.05f;
     public static readonly float MAX_RANGE_BTW_BALLS = 1f;
+
+    public static readonly int LAYERS_COUNT = 10;
 }
