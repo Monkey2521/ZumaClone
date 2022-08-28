@@ -1583,6 +1583,7 @@ GameObject:
   - component: {fileID: 610247949}
   - component: {fileID: 610247951}
   - component: {fileID: 610247950}
+  - component: {fileID: 610247952}
   m_Layer: 5
   m_Name: ScoreBar
   m_TagString: Untagged
@@ -1650,6 +1651,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610247948}
   m_CullTransparentMesh: 1
+--- !u!114 &610247952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610247948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23128d6fa8ca9fb45b476e8d5d9b4972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isDebug: 0
+  _scoreText: {fileID: 603327484}
 --- !u!1 &642511793
 GameObject:
   m_ObjectHideFlags: 0
@@ -4356,7 +4371,7 @@ MonoBehaviour:
     _sounds:
     - _name: 0
       _soundType: 2
-      _clip: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
+      _clip: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
     - _name: 1
       _soundType: 2
       _clip: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
@@ -5616,6 +5631,10 @@ PrefabInstance:
       propertyPath: _sounds._sounds.Array.data[0]._clip
       value: 
       objectReference: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
+    - target: {fileID: 469313168011350715, guid: 31e53b5295933864cb89dd93809d4f75, type: 3}
+      propertyPath: _sounds._sounds.Array.data[1]._clip
+      value: 
+      objectReference: {fileID: 8300000, guid: a235d590ef2a04d1b85b61ef4c21337c, type: 3}
     - target: {fileID: 469313168011350715, guid: 31e53b5295933864cb89dd93809d4f75, type: 3}
       propertyPath: _sounds._sounds.Array.data[2]._clip
       value: 
