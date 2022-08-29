@@ -16,6 +16,7 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
     private bool _isDestoyed;
     private int _enterIndex = -1;
     private Vector3 _enterPos;
+    private float _enterSpeed;
 
     public BallChain(MonoPool<Ball> pool, BallPath path, BallsSpawner spawner)
     {
@@ -56,11 +57,6 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
 
         int senderIndex = _balls.IndexOf(sender);
 
-        ball.StopAllCoroutines();
-        ball.Construct(this, _ballsPool);
-        ball.tag = "ChainedBall";
-        ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
-
         _enterIndex = side == EnterSide.Back ? senderIndex : senderIndex + 1;
         if (_enterIndex == _balls.Count)
         {
@@ -70,6 +66,11 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
         {
             _balls.Insert(_enterIndex, ball);
         }
+
+        ball.StopAllCoroutines();
+        ball.Construct(this, _ballsPool);
+        ball.tag = "ChainedBall";
+        ball.gameObject.layer = LayerMask.NameToLayer("ChainedBall");
 
         _maxDestroyIndex = _minDestroyIndex = -1;
         
@@ -112,42 +113,91 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
 
             if (_enterIndex == _balls.Count - 1)
             {
-                _enterPos = Vector3.MoveTowards
-                    (
-                        _balls[_enterIndex - 1].transform.position,
-                        _balls[_enterIndex - 1].transform.position + _balls[_enterIndex - 1].FollowPath.MoveDirection * GameRules.MAX_RANGE_BTW_BALLS,
-                        GameRules.MAX_RANGE_BTW_BALLS
-                    );
+                Vector3 newTarget;
+
+                _enterPos = CalculateNextBallPosition(_balls[_balls.Count - 2], out newTarget);
+                _balls[_enterIndex].FollowPath.Init(_path, newTarget);
+                _enterSpeed = _balls[0].FollowPath.Speed;
             }
             else if (_enterIndex == 0)
             {
                 _enterPos = _balls[0].FollowPath.PreviousPoint;
                 _balls[0].FollowPath.Init(_path, _balls[1].FollowPath.PreviousPoint);
+                _enterSpeed = _balls[0].FollowPath.Speed;
             }
             else
             {
                 _enterPos = _balls[_enterIndex + 1].transform.position;
+                float enterTime = CalculateTimeToEnter(ball.transform.position, _enterPos, ball.FollowPath.Speed);
+                _enterSpeed = (ball.transform.position - _enterPos).magnitude * _balls[0].FollowPath.Speed / (_balls[0].FollowPath.Speed * enterTime);
                 _balls[_enterIndex].FollowPath.Init(_path, _balls[_enterIndex + 1].FollowPath.TargetPoint);
             }
             
         }
     }
 
-    private Vector3 CalculateNextBallPosition(Vector3 currentPos)
+    private Vector3 CalculateNextBallPosition(Ball current, out Vector3 newPathTarget)
     {
-        Vector3 pos = Vector3.one;
+        Vector3 pos = current.transform.position;
 
+        do
+        {
+            current.FollowPath.SimulateMoving(pos);
+            pos = current.FollowPath.simulatedPosition;
+        } while (!CheckBallsRange(pos, current.transform.position));
+
+        newPathTarget = current.FollowPath.simulatedTarget;
+        
         return pos;
     }
 
-    private Vector3 CalculateNextBallPosition(Vector3 current, Vector3 next)
+    private Vector3 CalculateNextBallPosition(Ball current, Ball next)
     {
-        Vector3 pos = Vector3.one;
+        Vector3 position = current.transform.position;
+        Vector3 nextPos = next.transform.position;
 
-        return pos;
+        if (CheckBallsRange(position, nextPos)) 
+        {
+            return nextPos;
+        }
+        else
+        {
+            if ((position - nextPos).magnitude < GameRules.MIN_RANGE_BTW_BALLS)
+            {
+                do
+                {
+                    current.FollowPath.SimulateMoving(position);
+                    position = current.FollowPath.simulatedPosition;
+                } while (!CheckBallsRange(position, current.transform.position));
+
+                return position;
+            }
+            else
+            {
+                return Vector3.MoveTowards(nextPos, position, ((position - nextPos).magnitude - GameRules.MAX_RANGE_BTW_BALLS) / current.FollowPath.Speed);
+            }
+            
+        }
     }
 
-    private bool CheckBallsRange(Vector3 first, Vector3 second) => (second - first).magnitude < GameRules.MAX_RANGE_BTW_BALLS;
+    private float CalculateTimeToEnter(Vector3 from, Vector3 to, float speed)
+    {
+        float time = 0;
+
+        Vector3 position = from;
+
+        while ((to - position).magnitude > GameRules.MAX_DELTA_POS)
+        {
+            position = Vector3.MoveTowards(position, to, Time.fixedDeltaTime * speed);
+            time += Time.fixedDeltaTime;
+        }
+
+        return time;
+    }
+
+    private bool CheckBallsRange(Vector3 first, Vector3 second) => 
+        (second - first).magnitude <= GameRules.MAX_RANGE_BTW_BALLS && 
+        (second - first).magnitude >= GameRules.MIN_RANGE_BTW_BALLS;
 
     private int CheckRowScore(int index)
     {
@@ -193,6 +243,15 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
 
     public void OnCastle(Ball ball)
     {
+        if (_balls.IndexOf(ball) == _enterIndex)
+        {
+            _isEntering = false;
+            _isDestoyed = false;
+            _enterIndex = -1;
+            _enterSpeed = _balls[0].FollowPath.Speed;
+            _enterPos = -Vector3.one;
+        }
+
         _ballsPool.ReleaseObject(ball);
         _balls.Remove(ball);
     }
@@ -204,12 +263,12 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
         if (_isEntering)
         {
             if (!_isDestoyed)
-            { 
+            {
                 _balls[_enterIndex].transform.position = Vector3.MoveTowards
                     (
                         _balls[_enterIndex].transform.position, 
                         _enterPos,
-                        Time.fixedDeltaTime * _balls[_enterIndex].FollowPath.Speed
+                        Time.fixedDeltaTime * _enterSpeed
                     );
 
                 for(int i = _enterIndex + 1; i < _balls.Count; i++)
@@ -220,6 +279,10 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
                 if ((_balls[_enterIndex].transform.position - _enterPos).magnitude < GameRules.MAX_DELTA_POS)
                 {
                     _isEntering = false;
+                    _isDestoyed = false;
+                    _enterIndex = -1;
+                    _enterSpeed = _balls[0].FollowPath.Speed;
+                    _enterPos = -Vector3.one;
                 }
             }
             else
@@ -233,6 +296,7 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
                     _isEntering = false;
                     _isDestoyed = false;
                     _enterIndex = -1;
+                    _enterSpeed = _balls[0].FollowPath.Speed;
                     _enterPos = -Vector3.one;
                 }
             }
@@ -242,6 +306,11 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
             foreach(var ball in _balls)
             {
                 ball.FollowPath.Move();
+            }
+            for (int i = 1; i < _balls.Count; i++)
+            {
+                if (!CheckBallsRange(_balls[i].transform.position, _balls[i - 1].transform.position))
+                    _balls[i].transform.position = CalculateNextBallPosition(_balls[i - 1], _balls[i]);
             }
         }
     }

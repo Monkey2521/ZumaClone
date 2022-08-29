@@ -12,8 +12,9 @@ public static class GameRules
 
     public static readonly float MOVE_BACK_ON_PATH_SPEED_MULTIPLIER = 3f;
 
-    public static readonly float MAX_DELTA_POS = 0.05f;
-    public static readonly float MAX_RANGE_BTW_BALLS = 1f;
+    public static readonly float MAX_DELTA_POS = 0.075f;
+    public static readonly float MAX_RANGE_BTW_BALLS = 1.065f;
+    public static readonly float MIN_RANGE_BTW_BALLS = 0.935f;
 
     public static readonly int LAYERS_COUNT = 10;
 }

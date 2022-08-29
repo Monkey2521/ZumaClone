@@ -17,6 +17,9 @@ public class FollowPath : MonoBehaviour
     public Vector3 MoveDirection => (_moveDirection - transform.position).normalized;
     public float Speed => _speed;
 
+    public Vector3 simulatedPosition;
+    public Vector3 simulatedTarget;
+
     /// <summary>
     /// Initializing following path
     /// </summary>
@@ -45,6 +48,7 @@ public class FollowPath : MonoBehaviour
         {
             _previousPoint = _targetPoint;
             _targetPoint = _path.GetNextPoint(_targetPoint);
+            simulatedTarget = _targetPoint;
         }
     }
 
@@ -63,6 +67,22 @@ public class FollowPath : MonoBehaviour
         {
             _targetPoint = _previousPoint;
             _previousPoint = _path.GetPreviousPoint(_previousPoint);
+            simulatedTarget = _targetPoint;
+        }
+    }
+
+    public void SimulateMoving(Vector3 from)
+    {
+        if (simulatedTarget == -Vector3.one)
+        {
+            simulatedTarget = _path.HeadPosition;
+        }
+
+        simulatedPosition = Vector3.MoveTowards(from, simulatedTarget, Time.fixedDeltaTime * _speed);
+
+        if ((simulatedPosition - simulatedTarget).magnitude < GameRules.MAX_DELTA_POS )
+        {
+            simulatedTarget = _path.GetNextPoint(simulatedTarget);
         }
     }
 
