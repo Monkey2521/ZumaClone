@@ -8,6 +8,8 @@ public class ScoreCounter : MonoBehaviour, IGameStartHandler, IGameOverHandler, 
 
     [Header("Settings")]
     [SerializeField] private Text _scoreText;
+    [SerializeField] private GameObject _starGO;
+    [SerializeField] private Image _selfImage;
 
     private int _score;
     public int Score => _score;
@@ -24,13 +26,19 @@ public class ScoreCounter : MonoBehaviour, IGameStartHandler, IGameOverHandler, 
 
     public void OnGameStart()
     {
+        _selfImage.enabled = true;
+        _starGO.SetActive(true);
+        _scoreText.gameObject.SetActive(true);
+
         _score = 0;
         UpdateUI();
     }
 
     public void OnGameOver()
     {
-
+        _selfImage.enabled = false;
+        _starGO.SetActive(false);
+        _scoreText.gameObject.SetActive(false);
     }
 
     public void OnScoreUpdate(int score)

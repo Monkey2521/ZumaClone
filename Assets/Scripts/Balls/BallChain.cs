@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class BallChain : IClearPathHandler
+public sealed class BallChain : IClearPathHandler, IGameOverHandler
 {
     private List<Ball> _balls;
     private MonoPool<Ball> _ballsPool;
@@ -255,6 +255,15 @@ public sealed class BallChain : IClearPathHandler
         }
 
         _spawner.OnGameStart();
+    }
+
+    public void OnGameOver()
+    {
+        while (_balls.Count > 0)
+        {
+            _ballsPool.ReleaseObject(_balls[_balls.Count - 1]);
+            _balls.RemoveAt(_balls.Count - 1);
+        }
     }
 
     ~BallChain (){

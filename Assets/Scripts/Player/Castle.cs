@@ -13,6 +13,7 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
     [SerializeField] private Image _boosterColldownImage;
     [SerializeField] private Image _healtBar;
     [SerializeField] private Image _destroyChainButton;
+    [SerializeField] private GameObject _localUI;
 
     private bool _onGame;
     private bool _boosterReady;
@@ -25,8 +26,6 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
     private void OnEnable()
     {
         EventBus.Subscribe(this);
-
-        OnGameStart();
     }
 
     private void OnDisable()
@@ -42,6 +41,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
         _boosterReady = false;
         _destroyChainButton.gameObject.SetActive(false);
         _healtBar.fillAmount = _hp / MaxHP;
+
+        _localUI.SetActive(true);
     }
 
     private void Update()
@@ -85,6 +86,9 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
     public void Die()
     {
         _onGame = false;
+
+        _destroyChainButton.gameObject.SetActive(false);
+        _localUI.SetActive(false);
 
         EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Destroy]));
         EventBus.Publish<IGameOverHandler>(handler => handler.OnGameOver());

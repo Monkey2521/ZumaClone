@@ -517,6 +517,7 @@ MonoBehaviour:
   _boosterColldownImage: {fileID: 287685097}
   _healtBar: {fileID: 612868012}
   _destroyChainButton: {fileID: 0}
+  _localUI: {fileID: 452043289}
 --- !u!1 &7782124289523267227
 GameObject:
   m_ObjectHideFlags: 0

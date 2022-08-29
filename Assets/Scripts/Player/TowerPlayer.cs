@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class TowerPlayer : MonoBehaviour, IScreenTapHandler
+public class TowerPlayer : MonoBehaviour, IScreenTapHandler, IGameStartHandler, IGameOverHandler
 {
     [Header("Debug settings")]
     [SerializeField] private bool _isDebug;
@@ -25,6 +25,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
     private void OnEnable()
     {
         EventBus.Subscribe(this);
+        
     }
 
     private void OnDisable()
@@ -34,28 +35,51 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
         StopAllCoroutines();
     }
 
-    private void Start()
+    public void OnGameStart()
     {
-        if (_currentBall == null)
-        {
-            _currentBall = _balls.Pool.PullObject();
-            _currentBall.transform.position = transform.position;
-            _currentBall.transform.parent = transform;
+        _nextBallPreview.gameObject.SetActive(true);
 
-            _currentBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
-            _currentBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
+        if (_currentBall != null)
+        {
+            _balls.Pool.ReleaseObject(_currentBall);
         }
 
-        if (_nextBall == null)
+        _currentBall = _balls.Pool.PullObject();
+        _currentBall.transform.position = transform.position;
+        _currentBall.transform.parent = transform;
+
+        _currentBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
+        _currentBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
+
+        if (_nextBall != null)
         {
-            _nextBall = _balls.Pool.PullObject();
-            _nextBall.gameObject.SetActive(false);
-            _nextBall.transform.parent = transform;
+            _balls.Pool.ReleaseObject(_nextBall);
+        }
 
-            _nextBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
-            _nextBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
+        _nextBall = _balls.Pool.PullObject();
+        _nextBall.gameObject.SetActive(false);
+        _nextBall.transform.parent = transform;
 
-            _nextBallPreview.Init(_nextBall.Color);
+        _nextBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
+        _nextBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
+
+        _nextBallPreview.Init(_nextBall.Color);
+    }
+
+    public void OnGameOver()
+    {
+        _nextBallPreview.gameObject.SetActive(false);
+
+        if (_currentBall != null)
+        {
+            _balls.Pool.ReleaseObject(_currentBall);
+            _currentBall = null;
+        }
+
+        if (_nextBall != null)
+        {
+            _balls.Pool.ReleaseObject(_nextBall);
+            _nextBall = null;
         }
     }
 
