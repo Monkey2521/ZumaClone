@@ -21,8 +21,8 @@ public class Ball : MonoBehaviour, IDamageable, IPoolable
 
     private int _hp;
 
-    public int MaxHP => _stats.MaxHP; // TODO возможность появления "тяжелых" шаров,
-    public int HP => _hp; // для уничтожения которых нужно два или более попаданий (три в ряд)
+    public int MaxHP => _stats.MaxHP; // TODO spawning "heavy" balls with 2 or more hp
+    public int HP => _hp; 
     public FollowPath FollowPath => _followPath;
     public Color Color => _color;
 
@@ -112,15 +112,15 @@ public class Ball : MonoBehaviour, IDamageable, IPoolable
     {
         if (collision.gameObject.tag == "PlayerBall" && _chain != null)
         {
-            if (_isDebug) Debug.Log("Collision with player ball");
+            if (_isDebug) Debug.Log("Collision with player ball"); // if this ball now in chain and collides with 
 
-            Ball enterBall = collision.gameObject.GetComponent<Ball>();
+            Ball enterBall = collision.gameObject.GetComponent<Ball>(); // throwed ball
 
             _chain.OnBallEnter(this, enterBall, GetEnterSide(enterBall));
         }
         else if (collision.gameObject.tag == "Castle" && !CompareTag("PlayerBall"))
         {
-            if (_isDebug) Debug.Log("Collision with castle");
+            if (_isDebug) Debug.Log("Collision with castle"); // on castle collision
 
             collision.gameObject.GetComponent<Castle>().TakeDamage(GameRules.BALL_DAMAGE);
 
@@ -129,6 +129,11 @@ public class Ball : MonoBehaviour, IDamageable, IPoolable
         else return;
     }
 
+    /// <summary>
+    /// Calculates enter side in chain
+    /// </summary>
+    /// <param name="enterBall">Entered ball in chain</param>
+    /// <returns>Enter side in chain</returns>
     private EnterSide GetEnterSide(Ball enterBall)
     {
         EnterSide side;

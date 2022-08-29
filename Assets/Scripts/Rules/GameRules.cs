@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public static class GameRules
 {
     public static readonly int MIN_ROW_TO_DESTROY = 3;
@@ -16,5 +12,5 @@ public static class GameRules
     public static readonly float MAX_RANGE_BTW_BALLS = 1.065f;
     public static readonly float MIN_RANGE_BTW_BALLS = 0.935f;
 
-    public static readonly int LAYERS_COUNT = 10;
+    //public static readonly int LAYERS_COUNT = 10; 
 }

@@ -14,6 +14,11 @@ public sealed class BallPath : MonoBehaviour
     public List<Vector3> Points => _points;
     public Vector3 HeadPosition => _points[0];
 
+    /// <summary>
+    /// Get next point in path
+    /// </summary>
+    /// <param name="point">Path point to get next</param>
+    /// <returns>Next path point</returns>
     public Vector3 GetNextPoint(Vector3 point)
     {
         if (!_points.Contains(point))
@@ -27,6 +32,11 @@ public sealed class BallPath : MonoBehaviour
         else return _points[index + 1];
     }
 
+    /// <summary>
+    /// Get prev point in path
+    /// </summary>
+    /// <param name="point">Path point to get prev</param>
+    /// <returns>Previuos path point</returns>
     public Vector3 GetPreviousPoint(Vector3 point)
     {
         if (!_points.Contains(point))
@@ -40,8 +50,9 @@ public sealed class BallPath : MonoBehaviour
         else return _points[index - 1];
     }
 
-    
-
+    /// <summary>
+    /// Calculate path points in chidren transforms
+    /// </summary>
     [ContextMenu("Calculate points")]
     private void CalculatePoints()
     {

@@ -12,8 +12,8 @@ public class FollowPath : MonoBehaviour
 
     private BallPath _path;
 
-    public Vector3 TargetPoint => _targetPoint;
-    public Vector3 PreviousPoint => _previousPoint;
+    public Vector3 TargetPoint => _targetPoint; // next point in path
+    public Vector3 PreviousPoint => _previousPoint; // prev point in path
     public Vector3 MoveDirection => (_moveDirection - transform.position).normalized;
     public float Speed => _speed;
 
@@ -33,6 +33,9 @@ public class FollowPath : MonoBehaviour
         GetMoveDirection(_speed);
     }
 
+    /// <summary>
+    /// Move forward in path
+    /// </summary>
     public void Move()
     {
         if (_targetPoint == -Vector3.one)
@@ -52,6 +55,10 @@ public class FollowPath : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Move back in path with current speed
+    /// </summary>
+    /// <param name="speed"></param>
     public void MoveBack(float speed)
     {
         if (_previousPoint == -Vector3.one)
@@ -71,6 +78,10 @@ public class FollowPath : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Simulate moving in path
+    /// </summary>
+    /// <param name="from"></param>
     public void SimulateMoving(Vector3 from)
     {
         if (simulatedTarget == -Vector3.one)

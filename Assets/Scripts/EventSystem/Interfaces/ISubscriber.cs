@@ -1,1 +1,1 @@
-public interface ISubscriber { }
+public interface ISubscriber { } // Event system marker

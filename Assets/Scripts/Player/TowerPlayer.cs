@@ -35,6 +35,9 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler, IGameStartHandler, 
         StopAllCoroutines();
     }
 
+    /// <summary>
+    /// Get first balls to throw
+    /// </summary>
     public void OnGameStart()
     {
         _nextBallPreview.gameObject.SetActive(true);
@@ -83,6 +86,10 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler, IGameStartHandler, 
         }
     }
 
+    /// <summary>
+    /// Reloading ball
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator GetNextBall()
     {
         _currentBall = null;
@@ -107,6 +114,10 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler, IGameStartHandler, 
         EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Reload]));
     }
 
+    /// <summary>
+    /// Throwing in current ball in point
+    /// </summary>
+    /// <param name="point">Point need to throw ball</param>
     public void OnScreenTap(Vector3 point)
     {
         if (_currentBall != null)

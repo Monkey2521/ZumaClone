@@ -45,6 +45,8 @@ public class InputController : MonoBehaviour
 
         if (_tapPosition != Vector3.one)
         {
+            // TODO check if tap on UI
+
             if (_isDebug) Debug.Log("Tap on " + _tapPosition);
             
             _tapPosition.z = 0;

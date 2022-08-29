@@ -47,7 +47,7 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
 
     private void Update()
     {
-        if (!_boosterReady && _onGame)
+        if (!_boosterReady && _onGame) // update cooldown timer
         {
             _boosterColldownImage.fillAmount = _timer / _clearBooster.Cooldown;
 
