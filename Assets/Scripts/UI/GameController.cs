@@ -8,6 +8,16 @@ public class GameController : MonoBehaviour, IGameOverHandler
     [SerializeField] private GameObject _gameOverMenu;
     [SerializeField] private GameObject _startButton;
 
+    private void OnEnable()
+    {
+        EventBus.Subscribe(this);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(this);    
+    }
+
     public void StartGame()
     {
         _gameOverMenu.SetActive(false);

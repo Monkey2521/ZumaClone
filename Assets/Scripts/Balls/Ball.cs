@@ -124,7 +124,7 @@ public class Ball : MonoBehaviour, IDamageable, IPoolable
 
             collision.gameObject.GetComponent<Castle>().TakeDamage(GameRules.BALL_DAMAGE);
 
-            _chain.OnCastle(this);
+            if (_chain != null) _chain.OnCastle(this);
         }
         else return;
     }
