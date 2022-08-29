@@ -15,6 +15,7 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
     [SerializeField, Range(1f, 10f)] private float _ballThrowSpeed;
     [SerializeField, Range(0f, 1.5f)] private float _reloadTime;
     [SerializeField, Range(0f, 10f)] private float _ballReleaseDelay;
+    [SerializeField] private NextBall _nextBallPreview;
 
     private Ball _currentBall;
     private Ball _nextBall;
@@ -53,12 +54,15 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
 
             _nextBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
             _nextBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
+
+            _nextBallPreview.Init(_nextBall.Color);
         }
     }
 
     private IEnumerator GetNextBall()
     {
         _currentBall = null;
+        _nextBallPreview.PlayAnim(_reloadTime);
 
         yield return new WaitForSeconds(_reloadTime);
 
@@ -72,6 +76,9 @@ public class TowerPlayer : MonoBehaviour, IScreenTapHandler
 
         _nextBall.Init(_availableColors.GetRandomColor(), "PlayerBall");
         _nextBall.gameObject.layer = LayerMask.NameToLayer("PlayerBall");
+
+        _nextBallPreview.Init(_nextBall.Color);
+        _nextBallPreview.transform.position = new Vector3(1.4f, 0);
 
         EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Reload]));
     }

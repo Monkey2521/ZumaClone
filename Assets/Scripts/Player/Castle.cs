@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
-public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler, IPointerClickHandler
+public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
 {
     [Header("Debug settings")]
     [SerializeField] private bool _isDebug;
@@ -12,6 +11,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler, IPoi
     [SerializeField] private SoundList _sounds;
     [SerializeField] private ClearBooster _clearBooster;
     [SerializeField] private Image _boosterColldownImage;
+    [SerializeField] private Image _healtBar;
+    [SerializeField] private Image _destroyChainButton;
 
     private bool _onGame;
     private bool _boosterReady;
@@ -39,6 +40,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler, IPoi
         _timer = 0;
         _onGame = true;
         _boosterReady = false;
+        _destroyChainButton.gameObject.SetActive(false);
+        _healtBar.fillAmount = _hp / MaxHP;
     }
 
     private void Update()
@@ -50,6 +53,7 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler, IPoi
             if (_timer >= _clearBooster.Cooldown)
             {
                 _boosterReady = true;
+                _destroyChainButton.gameObject.SetActive(true);
                 EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.Reload]));
             }
             else
@@ -66,7 +70,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler, IPoi
         _hp -= damage;
 
         EventBus.Publish<IPlayerHPUpdateHandler>(handler => handler.OnPlayerHPUpdate(HP, MaxHP));
-        
+        _healtBar.fillAmount = (float)_hp / (float)MaxHP;
+
         if (_hp <= 0)
         {
             Die();
@@ -87,16 +92,14 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler, IPoi
         if (_isDebug) Debug.Log("Game over");
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void UseBooster()
     {
-        if (_isDebug) Debug.Log("Click on Castle");
-
         if (_boosterReady && _onGame)
         {
-            EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.UseBooster]));
             _clearBooster.MakeEffect();
-            _boosterReady = false;
             _timer = 0;
+            _boosterReady = false;
+            _destroyChainButton.gameObject.SetActive(false);
         }
     }
 }

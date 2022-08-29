@@ -14,13 +14,12 @@ public class StarParticle : MonoBehaviour, IPoolable
 
     public void ResetObject() 
     {
+        _pool = null;
     }
 
     public void Play(int maxParticles)
     {
-        Debug.Log(maxParticles + " " + (short)maxParticles);
         _particles.maxParticles = maxParticles;
-        _particles.emission.SetBurst(0, new ParticleSystem.Burst(0f, 0, (short)maxParticles, 1, 0f));
         _particles.Play();
 
         StartCoroutine(WaitRelease());
@@ -29,6 +28,7 @@ public class StarParticle : MonoBehaviour, IPoolable
     private IEnumerator WaitRelease()
     {
         yield return new WaitForSeconds(_particles.main.duration);
+
         _pool.ReleaseObject(this);
     }
 }

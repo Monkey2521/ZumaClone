@@ -19,7 +19,7 @@ public sealed class BallsSpawner : MonoBehaviour, IGameStartHandler, IGameOverHa
         EventBus.Subscribe(this);
 
         _balls.CreatePool();
-        _ballLine = new BallChain(_balls.Pool, _path);
+        _ballLine = new BallChain(_balls.Pool, _path, this);
 
         transform.position = _path.HeadPosition;
 

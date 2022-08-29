@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93cfa1630a27b3d4fa2939b2ca8baede, type: 3}
   m_Name: ClearBooster
   m_EditorClassIdentifier: 
-  _cooldown: 30
+  _cooldown: 10

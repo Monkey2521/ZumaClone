@@ -35,16 +35,13 @@ public class StarParticlePool : MonoBehaviour, IBallDestroyedHandler
         Transform poolParent = new GameObject("StarParticlePool").transform;
 
         _pool = new MonoPool<StarParticle>(_particlePrefab, _poolCapacity, poolParent);
-
-        foreach(var obj in _pool.Objects)
-        {
-            obj.Construct(_pool);
-        }
     }
 
     public void OnBallDestroyed(Vector3 position, int scorePerBall)
     {
         var obj = _pool.PullObject();
+
+        obj.Construct(_pool);
 
         obj.transform.position = position;
         obj.Play(scorePerBall);

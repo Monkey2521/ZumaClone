@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class BallChain
+public sealed class BallChain : IClearPathHandler
 {
     private List<Ball> _balls;
     private MonoPool<Ball> _ballsPool;
     private BallPath _path;
+    private BallsSpawner _spawner;
 
     private Ball _head;
 
@@ -16,11 +17,14 @@ public sealed class BallChain
     private int _enterIndex = -1;
     private Vector3 _enterPos;
 
-    public BallChain(MonoPool<Ball> pool, BallPath path)
+    public BallChain(MonoPool<Ball> pool, BallPath path, BallsSpawner spawner)
     {
         _balls = new List<Ball>();
         _ballsPool = pool;
         _path = path;
+        _spawner = spawner;
+
+        EventBus.Subscribe(this);
     }
 
     public void AddBall(Ball ball)
@@ -240,6 +244,21 @@ public sealed class BallChain
                 ball.FollowPath.Move();
             }
         }
+    }
+
+    public void OnClearPath()
+    {
+        while(_balls.Count > 0)
+        {
+            _ballsPool.ReleaseObject(_balls[_balls.Count - 1]);
+            _balls.RemoveAt(_balls.Count - 1);
+        }
+
+        _spawner.OnGameStart();
+    }
+
+    ~BallChain (){
+        EventBus.Unsubscribe(this);
     }
 }
 
