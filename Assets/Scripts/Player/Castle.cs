@@ -102,6 +102,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
 
         if (_boosterReady && _onGame)
         {
+            EventBus.Publish<ISoundPlayHandler>(handler => handler.OnSoundPlay(_sounds[SoundNames.UseBooster]));
+
             _clearBooster.MakeEffect();
             _timer = 0;
             _boosterReady = false;
