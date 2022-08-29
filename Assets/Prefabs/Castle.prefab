@@ -179,7 +179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &452043290
 RectTransform:
   m_ObjectHideFlags: 0
@@ -512,7 +512,7 @@ MonoBehaviour:
       _clip: {fileID: 8300000, guid: 724131bc8a7f34041bb9f1701f0cb58d, type: 3}
     - _name: 4
       _soundType: 4
-      _clip: {fileID: 0}
+      _clip: {fileID: 8300000, guid: e157d8c7fe1c3c64c912271f5c63885f, type: 3}
   _clearBooster: {fileID: 11400000, guid: abbb37cc15a327f4bae06483ffb09f81, type: 2}
   _boosterColldownImage: {fileID: 287685097}
   _healtBar: {fileID: 612868012}
