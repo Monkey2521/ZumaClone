@@ -98,6 +98,8 @@ public sealed class Castle : MonoBehaviour, IDamageable, IGameStartHandler
 
     public void UseBooster()
     {
+        if (_isDebug) Debug.Log("Try use booster");
+
         if (_boosterReady && _onGame)
         {
             _clearBooster.MakeEffect();

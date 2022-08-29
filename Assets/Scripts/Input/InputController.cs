@@ -33,8 +33,6 @@ public class InputController : MonoBehaviour
             if (Input.touchCount > 0)
             {
                 _tapPosition = _camera.ScreenToWorldPoint(Input.GetTouch(0).position);
-
-                _tapPosition.z = 0;
             }
         }
         else
@@ -42,16 +40,15 @@ public class InputController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 _tapPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-
-                _tapPosition.z = 0;
             }
         }
 
         if (_tapPosition != Vector3.one)
         {
             if (_isDebug) Debug.Log("Tap on " + _tapPosition);
-
-            EventBus.Publish<IScreenTapHandler>(handler => handler.OnScreenTap(_tapPosition));
+            
+            _tapPosition.z = 0;
+            EventBus.Publish<IScreenTapHandler>(handler => handler.OnScreenTap(_tapPosition));          
         }
     }
 }
