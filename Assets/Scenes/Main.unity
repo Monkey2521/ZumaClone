@@ -5361,7 +5361,7 @@ MonoBehaviour:
       _soundType: 2
       _clip: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
   _ballThrowSpeed: 9
-  _reloadTime: 0.4
+  _reloadTime: 0.45
   _ballReleaseDelay: 3.8
   _nextBallPreview: {fileID: 1531231637}
 --- !u!4 &1578090396

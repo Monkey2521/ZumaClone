@@ -291,6 +291,13 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
                 {
                     _balls[i].FollowPath.MoveBack(_balls[i].FollowPath.Speed * GameRules.MOVE_BACK_ON_PATH_SPEED_MULTIPLIER);
                 }
+
+                for (int i = _enterIndex + 1; i < _balls.Count; i++)
+                {
+                    if (!CheckBallsRange(_balls[i].transform.position, _balls[i - 1].transform.position))
+                        _balls[i].transform.position = CalculateNextBallPosition(_balls[i - 1], _balls[i]);
+                }
+
                 if ((_balls[_enterIndex].transform.position - _balls[_enterIndex - 1].transform.position).magnitude <= GameRules.MAX_RANGE_BTW_BALLS)
                 {
                     _isEntering = false;
@@ -307,6 +314,7 @@ public sealed class BallChain : IClearPathHandler, IGameOverHandler
             {
                 ball.FollowPath.Move();
             }
+
             for (int i = 1; i < _balls.Count; i++)
             {
                 if (!CheckBallsRange(_balls[i].transform.position, _balls[i - 1].transform.position))
